@@ -1,5 +1,5 @@
 String getFileConPath(Map PageFileInfos){
-  Map FileInfos = PageFileInfos['FileInfos'];
+  Map FileInfos = PageFileInfos;
   String FileConPath = '';
   String fetype = FileInfos['fetype'];
 

@@ -20,7 +20,8 @@ class File_Page extends StatefulWidget {
 class _File_PageState extends State<File_Page> {
   _File_PageState(this.CurPath);
   String CurPath;
-  
+  Map CurPageFiles = {};
+
   // @override
   // void initState(){
   //   super.initState();
@@ -32,29 +33,45 @@ class _File_PageState extends State<File_Page> {
   //Color _themColr = Color.fromRGBO(220, 220, 220, 1.0);
 
   Color _themColr = Color.fromRGBO(253, 254, 254 , 1.0);
-  var FileInfos = {'Filetype':'folder','FileName':'abc.txt','FileDate':'2023-06-12 07:60','FileSize':'8.29MB','FileChosed':false};
-  var FileInfos1 = {'Filetype':'others','FileName':'fsiuf的44557.ISO','FileDate':'2023-06-12 07:60','FileSize':'8.29MB','FileChosed':false};
-  List <Widget> FileList = [];
+
 
   Future get_cur_files() async{
     List <Widget> Files_Infos = [];
     Map PageFilesInfos = await UserLofin().FilesData(CurPath);
     List FilesInfos_all = PageFilesInfos['FileList'];
 
-    Global.CurPage_File_Infos = {};
     Global.CurPage_File_Infos_Chosed={};
-    Global.FileSelectState = 0;
-
 
     for(var i=0;i<FilesInfos_all.length;i++){
-      Files_Infos.add(HomeCell({'FileInfos':FilesInfos_all[i],'NavInfos':PageFilesInfos['Nav']}));
-      Global.CurPage_File_Infos[FilesInfos_all[i]['filename']]=FilesInfos_all[i];
-      Global.CurPage_File_Infos[FilesInfos_all[i]['filename']]['selectedValue'] = false;
+      var FilesInfo=FilesInfos_all[i];
+      FilesInfo['selectedValue'] = false;
+      CurPageFiles[FilesInfo['filename']] = FilesInfo;
+      var Hocel = HomeCell(CurPageFiles,FilesInfo['filename'],getChosed);
+      HomeCell.PageFileInfos1 = CurPageFiles;
+      Files_Infos.add(Hocel);
+
     }
     return Files_Infos;
   }
   void getChosed(){
-    print(Global.CurPage_File_Infos_Chosed);
+    // List CurPageFileskeys = CurPageFiles.keys.toList();
+    // for(var i=0;i<CurPageFileskeys.length;i++){
+    //   CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = true;
+    // }
+    // HomeCell.PageFileInfos1 = CurPageFiles;
+    // HomeCell.a=1;
+    print(99);
+    // HomeCellState.setAl();
+
+    print(Global.CurPage_File_Infos_Chosed.length);
+
+    // setState(() {
+    //
+    // });
+
+
+
+    //print(Global.CurPage_File_Infos_Chosed);
   }
   // Future getDatas() async {
   //   String urlstr = 'http://rap2api.taobao.org/app/mock/311243/api/chat/list';
@@ -122,13 +139,14 @@ class _File_PageState extends State<File_Page> {
                 return Text('');
               }else{
                 //print(snapshot.data);
-                // return GestureDetector(
-                //   onTap: (){
-                //
-                //   },
-                //   child: ListView(children: snapshot.data,),
-                // );
-                return ListView(children: snapshot.data,);
+                return GestureDetector(
+                  onTapUp: (e){
+                    //getChosed();
+
+                  },
+                  child: ListView(children: snapshot.data,),
+                );
+                //return ListView(children: snapshot.data,);
               }
             },
           ),
@@ -151,13 +169,14 @@ class _File_PageState extends State<File_Page> {
 
 
           if (FaPath=='//'){
-            //return;
+            return;
           }
           if(Global.CurPage_File_Infos_Chosed.length>0){
             print(Global.CurPage_File_Infos_Chosed.length);
             return;
           }
           else{
+            Global.CurPage_File_Infos_Chosed = {};
             Navigator.of(context).pop();
           }
           // else{

@@ -7,29 +7,46 @@ import 'package:app/globals.dart';
 
 // import 'package:app/globals.dart' as globals;
 
-
 void SetGilbalPar(FileInfos){
-  if (Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']){
-    Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = false;
+
+  if (FileInfos['selectedValue']){
+    FileInfos['selectedValue'] = false;
     //Global.FileSelectState = Global.FileSelectState-1;
     Global.CurPage_File_Infos_Chosed.remove(FileInfos['filename']);
 
   }
   else{
-    Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = true;
+    FileInfos['selectedValue'] = true;
     //Global.FileSelectState = Global.FileSelectState+1;
     Global.CurPage_File_Infos_Chosed[FileInfos['filename']]=FileInfos;
   }
 }
+// void SetGilbalPar0(FileInfos){
+//   if (Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']){
+//     Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = false;
+//     //Global.FileSelectState = Global.FileSelectState-1;
+//     Global.CurPage_File_Infos_Chosed.remove(FileInfos['filename']);
+//
+//   }
+//   else{
+//     Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = true;
+//     //Global.FileSelectState = Global.FileSelectState+1;
+//     Global.CurPage_File_Infos_Chosed[FileInfos['filename']]=FileInfos;
+//   }
+// }
 
 
 class HomeCell extends StatefulWidget {
   Map PageFileInfos;
-  HomeCell(this.PageFileInfos);
+  String FileName;
+  final VoidCallback CallbackFun;
+  HomeCell(this.PageFileInfos,this.FileName,this.CallbackFun);
   //const HomeCell({super.key});
+  static Map PageFileInfos1={};
+
 
   @override
-  State<HomeCell> createState() => _HomeCellState(PageFileInfos);
+  State<HomeCell> createState() => HomeCellState(PageFileInfos1,FileName,CallbackFun);
 }
 
 class _HomeCellState1 extends State<HomeCell> {
@@ -43,12 +60,16 @@ class _HomeCellState1 extends State<HomeCell> {
 
 
 //class HomeCell1 extends StatelessWidget {
-class _HomeCellState extends State<HomeCell> {
-  _HomeCellState(this.PageFileInfos);
+class HomeCellState extends State<HomeCell> {
+  Map PageFileInfos;
+  final VoidCallback CallbackFun;
+  String FileName;
+  HomeCellState(this.PageFileInfos,this.FileName,this.CallbackFun);
+  Map FileInfos = {};
 //class HomeCell extends State {
   //const HomeCell({super.key});
 
-  Map PageFileInfos;
+
 
   //HomeCell1(this.PageFileInfos);
   final double _file_contain_wight = 50;
@@ -70,15 +91,20 @@ class _HomeCellState extends State<HomeCell> {
     // }
     // print(Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']);
     SetGilbalPar(FileInfos);
+    CallbackFun();
     setState(() {});
 
   }
+
+  // static void setAl(){
+  //   FileInfos['selectedValue']= true;
+  // }
 
 
 
   @override
   Widget build(BuildContext context) {
-    Map FileInfos = PageFileInfos['FileInfos'];
+    FileInfos = PageFileInfos[FileName];
     List<int>bytes2 = base64Decode(FileInfos['filelj']);
     String CurPath = Utf8Decoder().convert(bytes2);
     //print(FileInfos);
@@ -109,7 +135,7 @@ class _HomeCellState extends State<HomeCell> {
                       height: 10,
                       width: 10,
                       fit: BoxFit.fill,
-                      image: AssetImage(getFileConPath(PageFileInfos)),
+                      image: AssetImage(getFileConPath(FileInfos)),
                     ),
                     //color: Colors.red,
                   ),
@@ -210,7 +236,7 @@ class _HomeCellState extends State<HomeCell> {
             //color: Colors.red,
 
             child: Container(
-              child: _MyRadioGroup(FileInfos),
+              child: _MyRadioGroup(FileInfos,CallbackFun),
 
               // child1: Checkbox(
               //   shape: CircleBorder(),
@@ -245,16 +271,18 @@ class _HomeCellState extends State<HomeCell> {
 
 class _MyRadioGroup extends StatefulWidget {
   Map FileInfos;
-  _MyRadioGroup(this.FileInfos);
+  final VoidCallback CallbackFun;
+  _MyRadioGroup(this.FileInfos,this.CallbackFun);
 
 
   @override
-  _MyRadioGroupState createState() => _MyRadioGroupState(FileInfos);
+  _MyRadioGroupState createState() => _MyRadioGroupState(FileInfos,CallbackFun);
 }
 
 class _MyRadioGroupState extends State<_MyRadioGroup> {
   Map FileInfos;
-  _MyRadioGroupState(this.FileInfos);
+  final VoidCallback CallbackFun;
+  _MyRadioGroupState(this.FileInfos,this.CallbackFun);
   bool _selectedValue = false;
   //Map FileInfos;
   //HomeCell File_Infos;
@@ -269,7 +297,9 @@ class _MyRadioGroupState extends State<_MyRadioGroup> {
         shape: CircleBorder(),
         activeColor: Colors.blueAccent,
 
-        value: Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'],
+        value: FileInfos['selectedValue'],
+
+        //value: Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'],
         //value: _selectedValue,
         //value: _selectedValue,
         onChanged: (value) {
@@ -292,6 +322,7 @@ class _MyRadioGroupState extends State<_MyRadioGroup> {
           // Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']=_selectedValue;
           // FileInfos['FileChosed']=_selectedValue;
           // print(Global.CurPage_File_Infos_Chosed);
+          CallbackFun();
           setState(() {});
 
         },
