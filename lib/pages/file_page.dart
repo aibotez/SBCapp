@@ -21,6 +21,7 @@ class _File_PageState extends State<File_Page> {
   _File_PageState(this.CurPath);
   String CurPath;
   Map CurPageFiles = {};
+  //Map FileInfos = {};
 
   // @override
   // void initState(){
@@ -39,22 +40,17 @@ class _File_PageState extends State<File_Page> {
     List <Widget> Files_Infos = [];
     Map PageFilesInfos = await UserLofin().FilesData(CurPath);
     List FilesInfos_all = PageFilesInfos['FileList'];
-
     Global.CurPage_File_Infos_Chosed={};
-
     for(var i=0;i<FilesInfos_all.length;i++){
       var FilesInfo=FilesInfos_all[i];
       FilesInfo['selectedValue'] = false;
       CurPageFiles[FilesInfo['filename']] = FilesInfo;
-      var Hocel = HomeCell(CurPageFiles,FilesInfo['filename'],getChosed);
-      HomeCell.PageFileInfos1 = CurPageFiles;
-      Files_Infos.add(Hocel);
-
     }
-    return Files_Infos;
+    return HomeCell(key: UniqueKey(),PageFileInfos:CurPageFiles,CallbackFun:getChosed);
+    //return Files_Infos;
   }
   void getChosed(){
-    // List CurPageFileskeys = CurPageFiles.keys.toList();
+    List CurPageFileskeys = CurPageFiles.keys.toList();
     // for(var i=0;i<CurPageFileskeys.length;i++){
     //   CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = true;
     // }
@@ -144,7 +140,8 @@ class _File_PageState extends State<File_Page> {
                     //getChosed();
 
                   },
-                  child: ListView(children: snapshot.data,),
+                  child: snapshot.data,
+                  //child: ListView(key: UniqueKey(),children: snapshot.data,),
                 );
                 //return ListView(children: snapshot.data,);
               }

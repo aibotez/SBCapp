@@ -7,93 +7,45 @@ import 'package:app/globals.dart';
 
 // import 'package:app/globals.dart' as globals;
 
-void SetGilbalPar(FileInfos){
-
-  if (FileInfos['selectedValue']){
-    FileInfos['selectedValue'] = false;
-    //Global.FileSelectState = Global.FileSelectState-1;
-    Global.CurPage_File_Infos_Chosed.remove(FileInfos['filename']);
-
-  }
-  else{
-    FileInfos['selectedValue'] = true;
-    //Global.FileSelectState = Global.FileSelectState+1;
-    Global.CurPage_File_Infos_Chosed[FileInfos['filename']]=FileInfos;
-  }
-}
-// void SetGilbalPar0(FileInfos){
-//   if (Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']){
-//     Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = false;
-//     //Global.FileSelectState = Global.FileSelectState-1;
-//     Global.CurPage_File_Infos_Chosed.remove(FileInfos['filename']);
-//
-//   }
-//   else{
-//     Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = true;
-//     //Global.FileSelectState = Global.FileSelectState+1;
-//     Global.CurPage_File_Infos_Chosed[FileInfos['filename']]=FileInfos;
-//   }
-// }
 
 
 class HomeCell extends StatefulWidget {
   Map PageFileInfos;
-  String FileName;
   final VoidCallback CallbackFun;
-  HomeCell(this.PageFileInfos,this.FileName,this.CallbackFun);
+  HomeCell({required Key key, required this.PageFileInfos,required this.CallbackFun}) : super(key: key);
+  //HomeCell(this.PageFileInfos,this.FileName,this.CallbackFun);
   //const HomeCell({super.key});
-  static Map PageFileInfos1={};
-
-
   @override
-  State<HomeCell> createState() => HomeCellState(PageFileInfos1,FileName,CallbackFun);
+  State<HomeCell> createState() => HomeCellState(PageFileInfos,CallbackFun);
 }
 
-class _HomeCellState1 extends State<HomeCell> {
-  Map PageFileInfos;
-  _HomeCellState1(this.PageFileInfos);
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
 
 
 //class HomeCell1 extends StatelessWidget {
 class HomeCellState extends State<HomeCell> {
   Map PageFileInfos;
   final VoidCallback CallbackFun;
-  String FileName;
-  HomeCellState(this.PageFileInfos,this.FileName,this.CallbackFun);
-  Map FileInfos = {};
+  HomeCellState(this.PageFileInfos,this.CallbackFun);
+  //Map FileInfos = {};
+  List<Widget> Containers = [];
 //class HomeCell extends State {
   //const HomeCell({super.key});
-
-
 
   //HomeCell1(this.PageFileInfos);
   final double _file_contain_wight = 50;
 
 
 
-
-  void SetSelect(FileInfos){
-    //print(Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']);
-    // if (Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']){
-    //   Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = false;
-    //   Global.FileSelectState = Global.FileSelectState-1;
-    //   Global.CurPage_File_Infos_Chosed[FileInfos['filename']]=FileInfos;
-    // }
-    // else{
-    //   Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'] = true;
-    //   Global.FileSelectState = Global.FileSelectState+1;
-    //   Global.CurPage_File_Infos_Chosed.remove(FileInfos['filename']);
-    // }
-    // print(Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']);
-    SetGilbalPar(FileInfos);
+  void SetSelectlPar(FileName){
+    if (PageFileInfos[FileName]['selectedValue']){
+      PageFileInfos[FileName]['selectedValue'] = false;
+      Global.CurPage_File_Infos_Chosed.remove(FileName);
+    }else{
+      PageFileInfos[FileName]['selectedValue'] = true;
+      Global.CurPage_File_Infos_Chosed[FileName] = PageFileInfos[FileName];
+    }
     CallbackFun();
     setState(() {});
-
   }
 
   // static void setAl(){
@@ -101,21 +53,13 @@ class HomeCellState extends State<HomeCell> {
   // }
 
 
+  Widget contain_bud(index){
 
-  @override
-  Widget build(BuildContext context) {
-    FileInfos = PageFileInfos[FileName];
-    List<int>bytes2 = base64Decode(FileInfos['filelj']);
+    List PageFileInfos_list_namekey = PageFileInfos.keys.toList();
+    List<int>bytes2 = base64Decode(PageFileInfos[PageFileInfos_list_namekey[index]]['filelj']);
     String CurPath = Utf8Decoder().convert(bytes2);
-    //print(FileInfos);
-
-    //Widget ee = _MyRadioGroup(FileInfos);
-    //print(9);
-    //print(ee.);
-
-    return Container(
+    Widget containi = Container(
       margin: const EdgeInsets.only(bottom: 16.0),
-
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -135,7 +79,7 @@ class HomeCellState extends State<HomeCell> {
                       height: 10,
                       width: 10,
                       fit: BoxFit.fill,
-                      image: AssetImage(getFileConPath(FileInfos)),
+                      image: AssetImage(getFileConPath(PageFileInfos[PageFileInfos_list_namekey[index]])),
                     ),
                     //color: Colors.red,
                   ),
@@ -152,7 +96,7 @@ class HomeCellState extends State<HomeCell> {
                           width: MediaQuery.of(context).size.width -30-50-12-6,
                           //color: Colors.yellow,
                           child: Text(
-                            FileInfos['filename'],
+                            PageFileInfos[PageFileInfos_list_namekey[index]]['filename'],
                             style: const TextStyle(
                               color:Colors.black,
                               fontSize: 20,
@@ -172,7 +116,7 @@ class HomeCellState extends State<HomeCell> {
                                 //color: Colors.white,
                                 margin: const EdgeInsets.only(right: 12.0),
                                 child: Text(
-                                  FileInfos['date'],
+                                  PageFileInfos[PageFileInfos_list_namekey[index]]['date'],
                                   style: const TextStyle(
                                     color:Colors.black54,
                                     fontSize: 12,
@@ -185,7 +129,7 @@ class HomeCellState extends State<HomeCell> {
                                 //width: 20,
                                 //color: Colors.white,
                                 child: Text(
-                                  FileInfos['big'],
+                                  PageFileInfos[PageFileInfos_list_namekey[index]]['big'],
                                   style: const TextStyle(
                                     color:Colors.black54,
                                     fontSize: 12,
@@ -204,20 +148,12 @@ class HomeCellState extends State<HomeCell> {
                 ],
               ),
               onTap: (){
-
-                //getDatas();
-                //Global.CurPage_File_Infos_Chosed = {};
-                // print(FileInfos);
-                //print('click..'+FileInfos['filename']);
-                //print(Global.CurPage_File_Infos_Chosed);
-
-
                 if (Global.CurPage_File_Infos_Chosed.length>0){
                   //SetSelect(FileInfos);
-                  SetSelect(FileInfos);
-
+                  SetSelectlPar(PageFileInfos_list_namekey[index]);
+                  //SetSelectlPar(PageFileInfos_list_namekey[index]);
                 }else{
-                  if (FileInfos['isdir']==1){
+                  if (PageFileInfos[PageFileInfos_list_namekey[index]]['isdir']==1){
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => File_Page(CurPath)));
@@ -234,29 +170,20 @@ class HomeCellState extends State<HomeCell> {
             height: _file_contain_wight,
             width: 30,
             //color: Colors.red,
-
             child: Container(
-              child: _MyRadioGroup(FileInfos,CallbackFun),
-
-              // child1: Checkbox(
-              //   shape: CircleBorder(),
-              //   activeColor: Colors.blueAccent,
-              //   value: Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'],
-              //   onChanged: (value) {
-              //
-              //     if (value!){
-              //       Global.FileSelectState = Global.FileSelectState+1;
-              //     }
-              //     else{
-              //       Global.FileSelectState = Global.FileSelectState-1;
-              //     }
-              //     Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']=value;
-              //     Global.CurPage_File_Infos_Chosed[FileInfos['filename']]=FileInfos;
-              //     setState(() {});
-              //     print(Global.FileSelectState);
-              //
-              //   },
-              // ),
+              child: Container(
+                child: Checkbox(
+                  shape: CircleBorder(),
+                  activeColor: Colors.blueAccent,
+                  value: PageFileInfos[PageFileInfos_list_namekey[index]]['selectedValue'],
+                  onChanged: (value) {
+                    //PageFileInfos[PageFileInfos_list_namekey[index]]['selectedValue'] = value;
+                    SetSelectlPar(PageFileInfos_list_namekey[index]);
+                    // CallbackFun();
+                    // setState(() {});
+                  },
+                ),
+              ),
             ),
 
             //child: _MyRadioGroup(FileInfos),
@@ -264,73 +191,17 @@ class HomeCellState extends State<HomeCell> {
         ],
       ),
     );
+    return containi;
   }
-}
-
-
-
-class _MyRadioGroup extends StatefulWidget {
-  Map FileInfos;
-  final VoidCallback CallbackFun;
-  _MyRadioGroup(this.FileInfos,this.CallbackFun);
-
-
-  @override
-  _MyRadioGroupState createState() => _MyRadioGroupState(FileInfos,CallbackFun);
-}
-
-class _MyRadioGroupState extends State<_MyRadioGroup> {
-  Map FileInfos;
-  final VoidCallback CallbackFun;
-  _MyRadioGroupState(this.FileInfos,this.CallbackFun);
-  bool _selectedValue = false;
-  //Map FileInfos;
-  //HomeCell File_Infos;
-
 
 
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Checkbox(
-        shape: CircleBorder(),
-        activeColor: Colors.blueAccent,
-
-        value: FileInfos['selectedValue'],
-
-        //value: Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue'],
-        //value: _selectedValue,
-        //value: _selectedValue,
-        onChanged: (value) {
-
-          SetGilbalPar(FileInfos);
-
-          // //print(_selectedValue);
-          // _selectedValue = value!;
-          // //print(_selectedValue);
-          //
-          // if (value){
-          //   Global.FileSelectState = Global.FileSelectState+1;
-          //   Global.CurPage_File_Infos_Chosed[FileInfos['filename']]=FileInfos;
-          // }
-          // else{
-          //   Global.FileSelectState = Global.FileSelectState-1;
-          //   Global.CurPage_File_Infos_Chosed.remove(FileInfos['filename']);
-          // }
-          //
-          // Global.CurPage_File_Infos[FileInfos['filename']]['selectedValue']=_selectedValue;
-          // FileInfos['FileChosed']=_selectedValue;
-          // print(Global.CurPage_File_Infos_Chosed);
-          CallbackFun();
-          setState(() {});
-
-        },
-      ),
+    Widget list_view = ListView(children:List.generate(
+        PageFileInfos.length,
+        (index) => contain_bud(index)),
     );
-
-
+    return list_view;
   }
 }
-
-
