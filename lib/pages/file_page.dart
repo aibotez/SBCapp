@@ -115,7 +115,7 @@ class _File_PageState extends State<File_Page> {
           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              color: Colors.red,
+              //color: Colors.red,
               width: 50,
               child: Text('分类'),
             ),
@@ -125,7 +125,7 @@ class _File_PageState extends State<File_Page> {
               child: Text('文件'),
             ),
             Container(
-              alignment: Alignment.center,
+              alignment: Alignment.centerRight,
               width: 50,
               //color: Colors.red,
               child: Text('..'),
@@ -141,11 +141,13 @@ class _File_PageState extends State<File_Page> {
         children: [
           Container(
             width: 200,
-            color: Colors.red,
+            //color: Colors.red,
             child: Row(
               children: [
-                TextButton(
-                    onPressed: returnButon, child: Icon(Icons.arrow_back)),
+                GestureDetector(
+                  child: Icon(Icons.arrow_back),
+                  onTap:(){returnButon();},
+                ),
                 Container(width: 10,),
                 Expanded(child: Text(CurPathName)),
               ],
@@ -168,24 +170,10 @@ class _File_PageState extends State<File_Page> {
       appBar: AppBar(
           backgroundColor:_themColr,
           centerTitle: true,
-          //leading: Container(),
           automaticallyImplyLeading:false,
-          // actions: [
-          //   IconButton(onPressed: (){ },
-          //       icon: const Icon(Icons.search)),
-          //   Container(
-          //     child: Text('取消'),
-          //   ),
-          // ],
-
-
           elevation: 0.0,
           title: titleWidget(),),
 
-
-
-          //backgroundColor: Theme.of(context).colorScheme.primary,
-          //title: const Text('文件',style: TextStyle(color:Colors.black))),
       body: PopScope(
         canPop: false,
 
@@ -194,8 +182,6 @@ class _File_PageState extends State<File_Page> {
 
           child: FutureBuilder(
             future: get_cur_files(),
-            // future: getDatas(),
-            //future: UserLofin().FilesData('/home/'),
             builder: (BuildContext context,AsyncSnapshot snapshot){
               if (snapshot.connectionState == ConnectionState.waiting){
                 return Text('');
@@ -222,14 +208,8 @@ class _File_PageState extends State<File_Page> {
           if (didPop) {
             return;
           }
-          //print('11');
-          //print(CurPath);
-          String FaPath = GetFaPath();
-          //getChosed();
-          //Navigator.of(context).pop();
-          //Navigator.pop(context);
-          //return;
 
+          String FaPath = GetFaPath();
 
           if (FaPath=='//'){
             return;
@@ -242,13 +222,6 @@ class _File_PageState extends State<File_Page> {
             Global.CurPage_File_Infos_Chosed = {};
             Navigator.of(context).pop();
           }
-          // else{
-          //   Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => File_Page(FaPath)));
-          //   //return true;
-          // }
-          //Global.CurPage_File_Infos = {};
 
         },
       ),
