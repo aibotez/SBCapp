@@ -103,6 +103,62 @@ class _File_PageState extends State<File_Page> {
       );
     }
 
+
+    void returnButon(){
+      Global.CurPage_File_Infos_Chosed = {};
+      Navigator.of(context).pop();
+
+    }
+    Widget titleWidget(){
+      if (CurPath == '/home/'){
+        Widget RowWidget = Row(
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              color: Colors.red,
+              width: 50,
+              child: Text('分类'),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width - 100-40,
+              child: Text('文件'),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 50,
+              //color: Colors.red,
+              child: Text('..'),
+            )
+          ],
+        );
+        return RowWidget;
+      }
+      var PathNameList = CurPath.split('/');
+      String CurPathName = PathNameList[PathNameList.length-2];
+      Widget RowWidget = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 200,
+            color: Colors.red,
+            child: Row(
+              children: [
+                TextButton(
+                    onPressed: returnButon, child: Icon(Icons.arrow_back)),
+                Container(width: 10,),
+                Expanded(child: Text(CurPathName)),
+              ],
+            ),
+          ),
+          Container(
+            child: Text('sech'),
+          )
+        ],
+      );
+      return RowWidget;
+
+    }
     return Scaffold(
 
       // floatingActionButton: Container(
@@ -112,14 +168,24 @@ class _File_PageState extends State<File_Page> {
       appBar: AppBar(
           backgroundColor:_themColr,
           centerTitle: true,
+          //leading: Container(),
+          automaticallyImplyLeading:false,
+          // actions: [
+          //   IconButton(onPressed: (){ },
+          //       icon: const Icon(Icons.search)),
+          //   Container(
+          //     child: Text('取消'),
+          //   ),
+          // ],
 
 
           elevation: 0.0,
+          title: titleWidget(),),
 
 
 
           //backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text('文件',style: TextStyle(color:Colors.black))),
+          //title: const Text('文件',style: TextStyle(color:Colors.black))),
       body: PopScope(
         canPop: false,
 
