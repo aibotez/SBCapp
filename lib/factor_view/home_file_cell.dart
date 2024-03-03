@@ -37,6 +37,7 @@ class HomeCellState extends State<HomeCell> {
 
 
   void SetSelectlPar(FileName){
+
     if (PageFileInfos[FileName]['selectedValue']){
       PageFileInfos[FileName]['selectedValue'] = false;
       Global.CurPage_File_Infos_Chosed.remove(FileName);

@@ -3,6 +3,8 @@ import 'package:app/factor_view/home_file_cell.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/globals.dart';
 import '../pack/userlogin.dart';
+import 'dart:async';
+
 
 
 
@@ -21,6 +23,17 @@ class _File_PageState extends State<File_Page> {
   _File_PageState(this.CurPath);
   String CurPath;
   Map CurPageFiles = {};
+  bool BarNotiOpen = false;
+  StreamController<bool> _streamController_BarNotiOpen = StreamController();
+  StreamController<bool> _streamController_BomNotiOpen = StreamController();
+
+  @override
+  void dispose() {
+    //销毁
+    _streamController_BarNotiOpen.close();
+    _streamController_BomNotiOpen.close();
+    super.dispose();
+  }
   //Map FileInfos = {};
 
   // @override
@@ -57,7 +70,13 @@ class _File_PageState extends State<File_Page> {
     // HomeCell.PageFileInfos1 = CurPageFiles;
     // HomeCell.a=1;
     print(99);
-    // HomeCellState.setAl();
+    if (Global.CurPage_File_Infos_Chosed.length>0){
+      _streamController_BarNotiOpen.add(true);
+      _streamController_BomNotiOpen.add(true);
+    }else{
+      _streamController_BarNotiOpen.add(false);
+      _streamController_BomNotiOpen.add(false);
+    }
 
     print(Global.CurPage_File_Infos_Chosed.length);
 
@@ -172,10 +191,52 @@ class _File_PageState extends State<File_Page> {
           centerTitle: true,
           automaticallyImplyLeading:false,
           elevation: 0.0,
-          title: titleWidget(),),
+          title: Stack(
+            children: [
+              titleWidget(),
+              StreamBuilder<bool>(
+          //初始值
+          initialData: BarNotiOpen,
+          //绑定Stream
+          stream: _streamController_BarNotiOpen.stream,
+          builder: (context,snapshot) {
+            return Container(
+              alignment: const FractionalOffset(0, 0),
+
+              child: Visibility (
+                  visible: snapshot.data!, // 设置是否可见：true:可见 false:不可见
+                  child: Container(
+                    color: Colors.red,
+                    width: MediaQuery.of(context).size.width,
+                    child: Text('test'),
+                  )
+              ),
+            );
+          },
+        ),
+
+
+
+              // Container(
+              //   alignment: const FractionalOffset(0, 0),
+              //
+              //   child: Visibility (
+              //       visible: Global.FileChoseBarNotiOpen, // 设置是否可见：true:可见 false:不可见
+              //       child: Container(
+              //         color: Colors.red,
+              //         width: MediaQuery.of(context).size.width,
+              //         child: Text('test'),
+              //       )
+              //   ),
+              // ),
+            ],
+          ),),
+
+
 
       body: PopScope(
         canPop: false,
+
 
         child: Container(
           color: _themColr,
@@ -211,13 +272,23 @@ class _File_PageState extends State<File_Page> {
 
           String FaPath = GetFaPath();
 
+          if(Global.CurPage_File_Infos_Chosed.length>0){
+            print(Global.CurPage_File_Infos_Chosed.length);
+            List CurPageFileskeys = CurPageFiles.keys.toList();
+            for(var i=0;i<CurPageFileskeys.length;i++){
+              CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = false;
+            }
+            setState(() {
+              _streamController_BarNotiOpen.add(false);
+              _streamController_BomNotiOpen.add(false);
+            });
+            return;
+          }
+
           if (FaPath=='//'){
             return;
           }
-          if(Global.CurPage_File_Infos_Chosed.length>0){
-            print(Global.CurPage_File_Infos_Chosed.length);
-            return;
-          }
+
           else{
             Global.CurPage_File_Infos_Chosed = {};
             Navigator.of(context).pop();
@@ -226,7 +297,33 @@ class _File_PageState extends State<File_Page> {
         },
       ),
 
+
       //body: mywidget(),
+
+
+
+      bottomNavigationBar:StreamBuilder<bool>(
+        //初始值
+        initialData: BarNotiOpen,
+        //绑定Stream
+        stream: _streamController_BomNotiOpen.stream,
+        builder: (context,snapshot) {
+          return Container(
+            //alignment: const FractionalOffset(0, 0),
+
+            child: Visibility (
+                visible: snapshot.data!, // 设置是否可见：true:可见 false:不可见
+                child: Container(
+                  color: Colors.blue,
+                  width: MediaQuery.of(context).size.width,
+                  child: Text('test'),
+                )
+            ),
+          );
+        },
+      ),
+
+
     );
   }
 }
