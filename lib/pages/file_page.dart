@@ -65,13 +65,13 @@ class _File_PageState extends State<File_Page> {
     //return Files_Infos;
   }
   void getChosed(){
-    List CurPageFileskeys = CurPageFiles.keys.toList();
+    // List CurPageFileskeys = CurPageFiles.keys.toList();
     // for(var i=0;i<CurPageFileskeys.length;i++){
     //   CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = true;
     // }
     // HomeCell.PageFileInfos1 = CurPageFiles;
     // HomeCell.a=1;
-    print(99);
+    //print(99);
     if (Global.CurPage_File_Infos_Chosed.length>0){
       _streamController_BarNotiOpen.add(true);
       _streamController_BomNotiOpen.add(true);
@@ -124,6 +124,28 @@ class _File_PageState extends State<File_Page> {
           visible: true, // 设置是否可见：true:可见 false:不可见
           child: Text('Hello World')
       );
+    }
+
+    void stlect_cancel_All(oper)
+    {
+      List CurPageFileskeys = CurPageFiles.keys.toList();
+      if (oper=='s'){
+
+        for(var i=0;i<CurPageFileskeys.length;i++){
+          CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = true;
+          Global.CurPage_File_Infos_Chosed[CurPageFileskeys[i]] = CurPageFiles[CurPageFileskeys[i]];
+        }
+        streamController_FilesSelectAll.add(CurPageFiles);
+      }
+      else{
+        for(var i=0;i<CurPageFileskeys.length;i++){
+          CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = false;
+          Global.CurPage_File_Infos_Chosed.remove(CurPageFileskeys[i]);
+        }
+        streamController_FilesSelectAll.add(CurPageFiles);
+        //getChosed();
+      }
+      getChosed();
     }
 
 
@@ -200,24 +222,40 @@ class _File_PageState extends State<File_Page> {
               titleWidget(),
               StreamBuilder<bool>(
           //初始值
-          initialData: BarNotiOpen,
+                initialData: BarNotiOpen,
           //绑定Stream
-          stream: _streamController_BarNotiOpen.stream,
-          builder: (context,snapshot) {
-            return Container(
-              alignment: const FractionalOffset(0, 0),
+                stream: _streamController_BarNotiOpen.stream,
+                builder: (context,snapshot) {
+                  return Container(
+                    alignment: const FractionalOffset(0, 0),
 
-              child: Visibility (
-                  visible: snapshot.data!, // 设置是否可见：true:可见 false:不可见
-                  child: Container(
-                    color: Colors.red,
-                    width: MediaQuery.of(context).size.width,
-                    child: Text('test'),
-                  )
+                    child: Visibility (
+                        visible: snapshot.data!, // 设置是否可见：true:可见 false:不可见
+                        child: Container(
+
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                child:Text('取消',style: TextStyle(color: Colors.blueAccent),),
+                                onTap: (){stlect_cancel_All('');},
+                              ),
+                              Container(
+                                child: Text('已选${Global.CurPage_File_Infos_Chosed.length}个/共${CurPageFiles.length}个'),
+                              ),
+                              GestureDetector(
+                                child:Text('全选',style: TextStyle(color: Colors.blueAccent)),
+                                onTap: (){stlect_cancel_All('s');},
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
 
 
 
