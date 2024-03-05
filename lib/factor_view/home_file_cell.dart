@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../pack/getfileconpath.dart';
 import 'package:app/globals.dart';
+import 'dart:async';
 
 // import 'package:app/globals.dart' as globals;
 
@@ -11,12 +12,14 @@ import 'package:app/globals.dart';
 
 class HomeCell extends StatefulWidget {
   Map PageFileInfos;
+  StreamController<Map> streamController_FilesSelectAll;
   final VoidCallback CallbackFun;
-  HomeCell({required Key key, required this.PageFileInfos,required this.CallbackFun}) : super(key: key);
+  HomeCell({required Key key, required this.PageFileInfos,required this.CallbackFun,required this.streamController_FilesSelectAll}) : super(key: key);
   //HomeCell(this.PageFileInfos,this.FileName,this.CallbackFun);
   //const HomeCell({super.key});
   @override
-  State<HomeCell> createState() => HomeCellState(PageFileInfos,CallbackFun);
+  State<HomeCell> createState() => HomeCellState(PageFileInfos,CallbackFun,streamController_FilesSelectAll);
+
 }
 
 
@@ -24,8 +27,10 @@ class HomeCell extends StatefulWidget {
 //class HomeCell1 extends StatelessWidget {
 class HomeCellState extends State<HomeCell> {
   Map PageFileInfos;
+  StreamController<Map> streamController_FilesSelectAll;
+  // ValueNotifier<bool> valueNotifier = ValueNotifier(false);
   final VoidCallback CallbackFun;
-  HomeCellState(this.PageFileInfos,this.CallbackFun);
+  HomeCellState(this.PageFileInfos,this.CallbackFun,this.streamController_FilesSelectAll);
   //Map FileInfos = {};
   List<Widget> Containers = [];
 //class HomeCell extends State {
@@ -37,6 +42,7 @@ class HomeCellState extends State<HomeCell> {
 
 
   void SetSelectlPar(FileName){
+
 
     if (PageFileInfos[FileName]['selectedValue']){
       PageFileInfos[FileName]['selectedValue'] = false;
@@ -192,7 +198,19 @@ class HomeCellState extends State<HomeCell> {
         ],
       ),
     );
-    return containi;
+
+    Widget Strem = StreamBuilder<Map>(
+      //初始值
+      initialData: PageFileInfos,
+      //绑定Stream
+      stream: streamController_FilesSelectAll.stream,
+      builder: (context,snapshot) {
+        PageFileInfos = snapshot.data!;
+        return containi;
+      },
+    );
+
+    return Strem;
   }
 
 

@@ -26,12 +26,14 @@ class _File_PageState extends State<File_Page> {
   bool BarNotiOpen = false;
   StreamController<bool> _streamController_BarNotiOpen = StreamController();
   StreamController<bool> _streamController_BomNotiOpen = StreamController();
+  StreamController<Map> streamController_FilesSelectAll = StreamController.broadcast();
 
   @override
   void dispose() {
     //销毁
     _streamController_BarNotiOpen.close();
     _streamController_BomNotiOpen.close();
+    streamController_FilesSelectAll.close();
     super.dispose();
   }
   //Map FileInfos = {};
@@ -59,7 +61,7 @@ class _File_PageState extends State<File_Page> {
       FilesInfo['selectedValue'] = false;
       CurPageFiles[FilesInfo['filename']] = FilesInfo;
     }
-    return HomeCell(key: UniqueKey(),PageFileInfos:CurPageFiles,CallbackFun:getChosed);
+    return HomeCell(key: UniqueKey(),PageFileInfos:CurPageFiles,CallbackFun:getChosed,streamController_FilesSelectAll:streamController_FilesSelectAll);
     //return Files_Infos;
   }
   void getChosed(){
@@ -77,6 +79,8 @@ class _File_PageState extends State<File_Page> {
       _streamController_BarNotiOpen.add(false);
       _streamController_BomNotiOpen.add(false);
     }
+
+    //streamController_FilesSelectAll.add(CurPageFiles);
 
     print(Global.CurPage_File_Infos_Chosed.length);
 
