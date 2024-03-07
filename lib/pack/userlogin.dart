@@ -8,6 +8,7 @@ class UserLofin{
     String host = '10.147.17.34:9090';
     String urlstr = 'http://' + host + '/GetFileListbyClient/';
     final url = Uri.parse(urlstr);
+    //pas
     String Cookie="2290227486@qq.comauth:pbkdf2_sha256\$260000\$xAC7jRv2Ll6SyatWxYwKme\$+GOP625eAG4gvQAj4iZE9XUi5zBNYgl6NaNbvWSyWts=";
     //print(Cookie);
     Map data = {
