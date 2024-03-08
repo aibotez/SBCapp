@@ -16,6 +16,7 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
+
         body: _pages[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,

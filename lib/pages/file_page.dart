@@ -213,6 +213,7 @@ class _File_PageState extends State<File_Page> {
       // ),
 
       appBar: AppBar(
+          scrolledUnderElevation: 0.0,
           backgroundColor:_themColr,
           centerTitle: true,
           automaticallyImplyLeading:false,
@@ -233,7 +234,9 @@ class _File_PageState extends State<File_Page> {
                         visible: snapshot.data!, // 设置是否可见：true:可见 false:不可见
                         child: Container(
 
-                          color: Colors.white,
+
+                          color: _themColr,
+                          //height: 300,
                           width: MediaQuery.of(context).size.width,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -315,15 +318,16 @@ class _File_PageState extends State<File_Page> {
           String FaPath = GetFaPath();
 
           if(Global.CurPage_File_Infos_Chosed.length>0){
-            print(Global.CurPage_File_Infos_Chosed.length);
-            List CurPageFileskeys = CurPageFiles.keys.toList();
-            for(var i=0;i<CurPageFileskeys.length;i++){
-              CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = false;
-            }
-            setState(() {
-              _streamController_BarNotiOpen.add(false);
-              _streamController_BomNotiOpen.add(false);
-            });
+            stlect_cancel_All('');
+            // print(Global.CurPage_File_Infos_Chosed.length);
+            // List CurPageFileskeys = CurPageFiles.keys.toList();
+            // for(var i=0;i<CurPageFileskeys.length;i++){
+            //   CurPageFiles[CurPageFileskeys[i]]['selectedValue'] = false;
+            // }
+            // setState(() {
+            //   _streamController_BarNotiOpen.add(false);
+            //   _streamController_BomNotiOpen.add(false);
+            // });
             return;
           }
 
