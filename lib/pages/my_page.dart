@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'SettingPage.dart';
 
 class My_Page extends StatefulWidget {
   const My_Page({super.key});
@@ -89,9 +90,17 @@ class _My_PageState extends State<My_Page> {
                     ],
                   ),
                 ),
-                Container(
-                  child: Icon(Icons.settings),
+                GestureDetector(
+                  child: Container(
+                    child: Icon(Icons.settings),
+                  ),
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => settingpage()));
+                  },
                 ),
+
               ],
             ),
           ),),

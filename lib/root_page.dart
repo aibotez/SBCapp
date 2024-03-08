@@ -13,7 +13,7 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage>{
   int _currentIndex = 0;
   List<Widget> _pages = [File_Page('/home/'),My_Page()];
-  
+
 
   @override
   Widget build(BuildContext context) {
