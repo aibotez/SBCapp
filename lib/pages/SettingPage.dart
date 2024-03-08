@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../pages/subpages/connection_setting.dart';
 
 class settingpage extends StatelessWidget {
   //const settingpage({super.key});
@@ -36,9 +37,122 @@ class settingpage extends StatelessWidget {
           ],
         )),
       ),
+      body: SettingListViews(context: context),
 
 
     );
+  }
+}
+
+class SettingListViews extends StatelessWidget {
+  BuildContext context;
+  SettingListViews({super.key,required this.context});
+
+  Widget creatListView(){
+    return ListView(
+      children: [
+        GestureDetector(
+          child:Container(
+              //color: Colors.transparent,
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left:10.0),
+
+                    child: Row(
+                      children: [
+                        Icon(Icons.link),
+                        Container(width: 10,),
+                        Text('连接设置')
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right:10.0),
+                    child: Icon(Icons.chevron_right,color: Colors.black26,),
+                  ),
+                ],
+              ),
+
+            ),
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => connectionsetting()));
+          },
+        ),
+        Divider(),
+        Container(
+          //color: Colors.transparent,
+          height: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left:10.0),
+
+                child: Row(
+                  children: [
+                    Icon(Icons.cloud_sync),
+                    Container(width: 10,),
+                    Text('同步设置')
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(right:10.0),
+                child: Icon(Icons.chevron_right,color: Colors.black26,),
+              ),
+            ],
+          ),
+
+        ),
+        Divider(),
+        GestureDetector(
+          child: Container(
+            //color: Colors.transparent,
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left:10.0),
+
+                  child: Row(
+                    children: [
+                      Icon(Icons.settings_outlined),
+                      Container(width: 10,),
+                      Text('其它设置')
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(right:10.0),
+                  child: Icon(Icons.chevron_right,color: Colors.black26,),
+                ),
+              ],
+            ),
+
+          ),
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => connectionsetting()));
+          },
+        ),
+
+        Divider(),
+      ],
+
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return creatListView();
   }
 }
 

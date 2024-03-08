@@ -92,7 +92,7 @@ class _My_PageState extends State<My_Page> {
                 ),
                 GestureDetector(
                   child: Container(
-                    child: Icon(Icons.settings),
+                    child: Icon(Icons.settings_outlined),
                   ),
                   onTap: (){
                     Navigator.push(
