@@ -1,12 +1,15 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../globals.dart';
 
 class UserLofin{
 
   FilesData(path) async{
     //String host = 'local.sbc.plus:9090';
     // String host = '10.147.17.34:9090';
-    String host = 'pi.sbc.plus:9090';
+    // String host = 'pi.sbc.plus:9090';
+    String host = Global.ipport;
+
     String urlstr = 'http://' + host + '/GetFileListbyClient/';
     final url = Uri.parse(urlstr);
     //pas

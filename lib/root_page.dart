@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 import 'pages/file_page.dart';
 import 'pages/my_page.dart';
 
+import 'globals.dart';
+
+import 'package:flutter/services.dart' show rootBundle;
+
+
+
+
 class RootPage extends StatefulWidget {
   const RootPage({super.key});
+
 
   @override
   State<RootPage> createState() => _RootPageState();
