@@ -13,9 +13,9 @@ import 'package:flutter/services.dart' show rootBundle;
 
 
 Future Init_Par() async{
-  String contents = await rootBundle.loadString('lib/pack/netfile.txt');
+  String contents = await rootBundle.loadString('lib/pack/netfile');
   // print(99);
-  print(contents);
+  // print(contents);
   List contlist = contents.split('\n');
   for (var i=0;i<contlist.length;i++){
     var conti = contlist[i].split('=');

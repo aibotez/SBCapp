@@ -45,7 +45,7 @@ class _My_PageState extends State<My_Page> {
                           height: 38,
 
                           alignment: Alignment.center,
-                          padding: EdgeInsets.only(top: 7),
+                          padding: EdgeInsets.only(top:13),
                           //color: Colors.white,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -79,7 +79,7 @@ class _My_PageState extends State<My_Page> {
                                 child: Text(
                                   '容量：26GB/16.0TB',
                                   //textAlign: TextAlign.start,
-                                  style: TextStyle(fontSize: 12,),
+                                  style: TextStyle(fontSize: 10,),
                                 ),
                               ),
                             ],
@@ -155,6 +155,32 @@ class MyPageListViews extends StatelessWidget {
                     Icon(Icons.widgets),
                     Container(width: 10,),
                     Text('我的应用')
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(right:10.0),
+                child: Icon(Icons.chevron_right,color: Colors.black26,),
+              ),
+            ],
+          ),
+
+        ),
+        Divider(),
+        Container(
+          //color: Colors.transparent,
+          height: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left:10.0),
+
+                child: Row(
+                  children: [
+                    Icon(Icons.downloading),
+                    Container(width: 10,),
+                    Text('传输列表')
                   ],
                 ),
               ),
