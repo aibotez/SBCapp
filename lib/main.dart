@@ -4,6 +4,8 @@ import 'dart:io';
 import 'globals.dart';
 import 'package:flutter/services.dart';
 
+import 'pack/dboper.dart';
+
 
 import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
@@ -12,7 +14,21 @@ import 'package:flutter/services.dart' show rootBundle;
 
 
 
+void main_test() {
+  final file = File('lib/pack/netfile');
+  final contents = file.readAsStringSync();
+  print(999);
+  print(contents);
+}
+
+
 Future Init_Par() async{
+  // main_test();
+
+  // MyDatabase();
+  // var mydata = MyDatabase();
+  // Global.db = mydata.db;
+
   String contents = await rootBundle.loadString('lib/pack/netfile');
   // print(99);
   // print(contents);
@@ -25,6 +41,8 @@ Future Init_Par() async{
       }
     }
   }
+
+  Global.db=MyDatabase().db;
   return 1;
 
 }

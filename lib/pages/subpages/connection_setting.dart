@@ -60,6 +60,13 @@ class connectioninput extends StatelessWidget {
     _streamController_Notitestresult.add(test_show);
   }
 
+  void testtxt(){
+    test_show['icn'] = Icon(Icons.done,color: Colors.green);
+    test_show['txt'] = '测试通过  '+txtcontent;
+    test_show['visb'] = true;
+    _streamController_Notitestresult.add(test_show);
+  }
+
   @override
   void dispose() {
     //销毁
@@ -112,18 +119,24 @@ class connectioninput extends StatelessWidget {
                     suretxt();
                   },
                 ),
-
-                Container(
-                  width: 70,
-                  height: 30,
-                  alignment: Alignment.center,
-                  // color: Colors.blue,
-                  decoration: BoxDecoration(
-                    color: Colors.greenAccent,
-                    borderRadius: BorderRadius.circular(20),
+                GestureDetector(
+                  child:Container(
+                    width: 70,
+                    height: 30,
+                    alignment: Alignment.center,
+                    // color: Colors.blue,
+                    decoration: BoxDecoration(
+                      color: Colors.greenAccent,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text('测试'),
                   ),
-                  child: Text('测试'),
+                  onTap: (){
+                    testtxt();
+                  },
                 ),
+
+
               ],
             ),
           ),

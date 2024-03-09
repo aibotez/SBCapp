@@ -3,12 +3,12 @@ import 'dart:convert';
 import '../globals.dart';
 
 class UserLofin{
+  String host = Global.ipport;
 
   FilesData(path) async{
     //String host = 'local.sbc.plus:9090';
     // String host = '10.147.17.34:9090';
     // String host = 'pi.sbc.plus:9090';
-    String host = Global.ipport;
 
     String urlstr = 'http://' + host + '/GetFileListbyClient/';
     final url = Uri.parse(urlstr);
@@ -39,20 +39,3 @@ class UserLofin{
   }
 }
 
-// def GetFileList(self,path):
-// url = 'http://' + self.host + '/GetFileListbyClient/'
-// data = {
-// 'path': path,
-// }
-// # print(self.headers)
-// res = requests.post(url, data=data,headers=self.headers)
-// # print(res)
-// FileDatas = json.loads(res.text)
-// # print(self.headers,FileDatas)
-// # print(FileDatas['FileList'])
-// # for i in FileDatas['FileList']:
-// #     print(i)
-// self.CurFileList = FileDatas['FileList']
-// self.Nav = FileDatas['Nav']
-// self.imgFiles = FileDatas['imgFiles']
-// return FileDatas['FileList']
