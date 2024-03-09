@@ -29,21 +29,26 @@ Future Init_Par() async{
   // var mydata = MyDatabase();
   // Global.db = mydata.db;
 
-  String contents = await rootBundle.loadString('lib/pack/netfile');
-  // print(99);
-  // print(contents);
-  List contlist = contents.split('\n');
-  for (var i=0;i<contlist.length;i++){
-    var conti = contlist[i].split('=');
-    if (conti.length>1){
-      if (conti[0] == 'ipport'){
-        Global.ipport = conti[1];
-      }
-    }
-  }
+  // String contents = await rootBundle.loadString('lib/pack/netfile');
+  // // print(99);
+  // // print(contents);
+  // List contlist = contents.split('\n');
+  // for (var i=0;i<contlist.length;i++){
+  //   var conti = contlist[i].split('=');
+  //   if (conti.length>1){
+  //     if (conti[0] == 'ipport'){
+  //       Global.ipport = conti[1];
+  //     }
+  //   }
+  // }
 
-  Global.db=MyDatabase().db;
-  return 1;
+  var mydata = MyDatabase();
+  List? netconfigs = await mydata.getdata();
+  print(netconfigs);
+
+
+  // Global.db=MyDatabase();
+  return netconfigs;
 
 }
 
@@ -76,9 +81,14 @@ class Home extends StatelessWidget {
       builder: (BuildContext context,AsyncSnapshot snapshot){
         if (snapshot.connectionState == ConnectionState.waiting){
           return Text('');
-        }else{
-          //print(snapshot.data);
-          return RootPage();
+        }
+        else{
+          // print(Global.db.dbpath);
+          print(snapshot.data);
+          // Global.db=MyDatabase();
+          // print(Global.db.dbpath);
+          return Text('');
+          // return RootPage();
           //return ListView(children: snapshot.data,);
         }
       },

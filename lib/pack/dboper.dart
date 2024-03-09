@@ -5,10 +5,11 @@ import 'package:path/path.dart';
 
 class MyDatabase {
   String dbpath='';
-  Database db = MyDatabase().db;
+  Database? db;
 
   MyDatabase(){
     database_path();
+    initdb();
   }
 
 
@@ -23,8 +24,12 @@ class MyDatabase {
     final path = join(dbpath, 'netconfig.db');
     try {
         db = await openDatabase(path);
+        _initDatabase();
+        insert();
+
       } catch (e) {
         _initDatabase();
+        insert();
       }
     db = await openDatabase(path);
   }
@@ -47,12 +52,24 @@ class MyDatabase {
 
   Future<bool> insert() async{
     // final db = await MyDatabase().database;
-    await db.insert(
-      'netconfig',
-      {'ipport': 'pi.sbc.plus:9090'},
+    await db?.insert(
+      'net',
+      {'ipport': 'pi'},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return true;
+
+  }
+
+  Future<List?> getdata() async{
+    // final db = await MyDatabase().database;
+    // List netconfig = await db?.query('netconfig');
+    try{
+      List? netconfig = await db?.query('net');
+      return netconfig;
+    }catch (e){
+      return [6];
+    }
 
   }
 

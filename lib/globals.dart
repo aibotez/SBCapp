@@ -10,5 +10,5 @@ class Global{
   static int FileSelectState=0;
   static String ipport='';
   // static bool FileChoseBarNotiOpen = false;
-  static Database? db = null;
+  static var db;
 }
