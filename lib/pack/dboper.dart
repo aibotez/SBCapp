@@ -23,9 +23,21 @@ class MyDatabase {
   void initdb() async{
     final path = join(dbpath, 'netconfig.db');
     try {
-        db = await openDatabase(path);
-        _initDatabase();
+        db = await openDatabase(
+          path,
+          version: 1,
+          onCreate: (Database db1, version) async {
+            await db1.execute(
+              'CREATE TABLE net(id INTEGER PRIMARY KEY AUTOINCREMENT, ipport TEXT)',
+            );
+          },
+        );
+
+        // _initDatabase();
         insert();
+        print(66);
+        List? a = await getdata();
+        // print(a);
 
       } catch (e) {
         _initDatabase();
@@ -42,8 +54,8 @@ class MyDatabase {
     return await openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) async {
-        await db.execute(
+      onCreate: (Database db1, version) async {
+        await db1.execute(
           'CREATE TABLE net(id INTEGER PRIMARY KEY AUTOINCREMENT, ipport TEXT)',
         );
       },
@@ -61,11 +73,13 @@ class MyDatabase {
 
   }
 
-  Future<List?> getdata() async{
+  Future<List> getdata() async{
     // final db = await MyDatabase().database;
     // List netconfig = await db?.query('netconfig');
     try{
-      List? netconfig = await db?.query('net');
+      final path = join(dbpath, 'netconfig.db');
+      Database db1 = await openDatabase(path);
+      List netconfig = await db1.query('net');
       return netconfig;
     }catch (e){
       return [6];

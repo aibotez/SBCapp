@@ -43,8 +43,10 @@ Future Init_Par() async{
   // }
 
   var mydata = MyDatabase();
-  List? netconfigs = await mydata.getdata();
+  List netconfigs = await mydata.getdata();
+  // await MyDatabase().getdata().then((value) => print(value));
   print(netconfigs);
+  // List netconfigs=[];
 
 
   // Global.db=MyDatabase();
