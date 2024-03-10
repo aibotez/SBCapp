@@ -47,6 +47,9 @@ class MyDatabase {
         if(infoslist.length>1){
           await deletdata(infoslist);
         }
+        if(infoslist.length<1){
+          insert();
+        }
         // print(a);
 
       } catch (e) {
