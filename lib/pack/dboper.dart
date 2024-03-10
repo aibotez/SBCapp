@@ -7,7 +7,12 @@ class MyDatabase {
   String dbpath='';
   Database? db;
 
-  MyDatabase(){
+  // MyDatabase(){
+  //   database_path();
+  //   initdb();
+  // }
+
+  void init(){
     database_path();
     initdb();
   }
@@ -38,11 +43,35 @@ class MyDatabase {
         // _initDatabase();
         // insert();
         // print(66);
-        // List? a = await getdata();
+        List infoslist = await getdata();
+        if(infoslist.length>1){
+          await deletdata(infoslist);
+        }
         // print(a);
 
       } catch (e) {
       }
+  }
+
+
+  Future<bool> deletdata(infoslist) async{
+    // final path = join(dbpath, 'netconfig.db');
+    // Database db1 = await openDatabase(path);
+    List ids = [];
+    for(var i=2;i<=infoslist.length;i++){
+      ids.add(i);
+    }
+
+    await db?.delete(
+      'net',
+      where: 'id = ?',
+      whereArgs: ids,
+    );
+
+    // db1.close();
+
+
+    return true;
   }
 
 
@@ -79,6 +108,18 @@ class MyDatabase {
     return true;
   }
 
+  Future <bool> updatedata(ipport) async{
+    final path = join(dbpath, 'netconfig.db');
+    Database db1 = await openDatabase(path);
+    await db1.update(
+      'net',
+      {'ipport': ipport},
+      where: 'id = ?',
+      whereArgs: [1],
+    );
+    db1.close();
+    return true;
+  }
   Future<List> getdata() async{
     // final db = await MyDatabase().database;
     // List netconfig = await db?.query('netconfig');
@@ -90,7 +131,7 @@ class MyDatabase {
       await db1.close();
       return netconfig;
     }catch (e){
-      return [6];
+      return [];
     }
 
   }

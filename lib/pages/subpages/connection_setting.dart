@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../../pack/dboper.dart';
+import '../../globals.dart';
 
 class connectionsetting extends StatelessWidget {
   // const connectionsetting({super.key});
@@ -53,9 +55,17 @@ class connectioninput extends StatelessWidget {
   TextEditingController controller = new TextEditingController();
 
 
-  void suretxt(){
+  Future<void> suretxt() async {
+
+    var mydata = MyDatabase();
+    mydata.updatedata(txtcontent);
+    Global.ipport = txtcontent;
+    // mydata.closebase();
+    List netconfigs = await mydata.getdata();
+
+
     test_show['icn'] = Icon(Icons.done,color: Colors.green);
-    test_show['txt'] = '测试通过  '+txtcontent;
+    test_show['txt'] = '测试通过  '+netconfigs[0]['ipport'];
     test_show['visb'] = true;
     _streamController_Notitestresult.add(test_show);
   }

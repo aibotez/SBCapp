@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'root_page.dart';
 import 'dart:io';
 import 'globals.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 
 import 'pack/dboper.dart';
 
 
 import 'dart:async' show Future;
-import 'package:flutter/services.dart' show rootBundle;
+// import 'package:flutter/services.dart' show rootBundle;
 
 
 
@@ -43,9 +43,12 @@ Future Init_Par() async{
   // }
 
   var mydata = MyDatabase();
+  mydata.init();
   List netconfigs = await mydata.getdata();
+  Global.ipport = netconfigs[0]['ipport'];
+  mydata.closebase();
   // await MyDatabase().getdata().then((value) => print(value));
-  print(netconfigs);
+  // print(netconfigs);
   // List netconfigs=[];
 
 
@@ -86,11 +89,11 @@ class Home extends StatelessWidget {
         }
         else{
           // print(Global.db.dbpath);
-          print(snapshot.data);
+          // print(snapshot.data);
           // Global.db=MyDatabase();
           // print(Global.db.dbpath);
-          return Text('');
-          // return RootPage();
+          // return Text('');
+          return RootPage();
           //return ListView(children: snapshot.data,);
         }
       },

@@ -1,6 +1,6 @@
 
-import 'package:sqflite/sqflite.dart';
-import 'pack/dboper.dart';
+// import 'package:sqflite/sqflite.dart';
+// import 'pack/dboper.dart';
 
 class Global{
   // var dbclass = MyDatabase();
@@ -10,5 +10,5 @@ class Global{
   static int FileSelectState=0;
   static String ipport='';
   // static bool FileChoseBarNotiOpen = false;
-  static var db;
+  // static var db;
 }
