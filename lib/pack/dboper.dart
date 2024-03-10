@@ -17,6 +17,8 @@ class MyDatabase {
     dbpath = await getDatabasesPath();
     print('dbpath:');
     print(dbpath);
+    // final path = join(dbpath, 'netconfig.db');
+    // await deleteDatabase(path);
     // final path = join(dbPath, 'my_database.db');
   }
 
@@ -40,10 +42,7 @@ class MyDatabase {
         // print(a);
 
       } catch (e) {
-        _initDatabase();
-        insert();
       }
-    db = await openDatabase(path);
   }
 
 
@@ -80,6 +79,8 @@ class MyDatabase {
       final path = join(dbpath, 'netconfig.db');
       Database db1 = await openDatabase(path);
       List netconfig = await db1.query('net');
+
+      await db1.close();
       return netconfig;
     }catch (e){
       return [6];
