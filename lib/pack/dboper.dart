@@ -36,14 +36,16 @@ class MyDatabase {
         );
 
         // _initDatabase();
-        insert();
-        print(66);
-        List? a = await getdata();
+        // insert();
+        // print(66);
+        // List? a = await getdata();
         // print(a);
 
       } catch (e) {
       }
   }
+
+
 
 
 
@@ -70,6 +72,11 @@ class MyDatabase {
     );
     return true;
 
+  }
+
+  Future<bool> closebase() async{
+    await db?.close();
+    return true;
   }
 
   Future<List> getdata() async{
