@@ -64,7 +64,7 @@ class _My_PageState extends State<My_Page> {
                                   // decoration: BoxDecoration(
                                   //   borderRadius: BorderRadius.all(Radius.circular(15)),
                                   // ),
-                                  child: ClipRRect(
+                                  child: const ClipRRect(
                                     borderRadius: BorderRadius.all(Radius.circular(100)),
                                     child: LinearProgressIndicator(
                                       value: 0.4,
@@ -104,13 +104,15 @@ class _My_PageState extends State<My_Page> {
               ],
             ),
           ),),
-        body:MyPageListViews(),
+        body:MyPageListViews(context),
     );
   }
 }
 
 class MyPageListViews extends StatelessWidget {
-  const MyPageListViews({super.key});
+  BuildContext context;
+  MyPageListViews(this.context);
+  // const MyPageListViews({super.key});
 
   Widget creatListView(){
     return ListView(
@@ -118,6 +120,8 @@ class MyPageListViews extends StatelessWidget {
         Container(
           //color: Colors.transparent,
           height: 40,
+          color: Colors.transparent,
+          width: MediaQuery.of(context).size.width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -144,6 +148,8 @@ class MyPageListViews extends StatelessWidget {
         Container(
           //color: Colors.transparent,
           height: 40,
+          color: Colors.transparent,
+          width: MediaQuery.of(context).size.width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -170,6 +176,8 @@ class MyPageListViews extends StatelessWidget {
         Container(
           //color: Colors.transparent,
           height: 40,
+          color: Colors.transparent,
+          width: MediaQuery.of(context).size.width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

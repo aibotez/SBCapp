@@ -52,9 +52,11 @@ class SettingListViews extends StatelessWidget {
     return ListView(
       children: [
         GestureDetector(
+
           child:Container(
-              //color: Colors.transparent,
               height: 40,
+              color: Colors.transparent,
+              width: MediaQuery.of(context).size.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -87,6 +89,8 @@ class SettingListViews extends StatelessWidget {
         Container(
           //color: Colors.transparent,
           height: 40,
+          color: Colors.transparent,
+          width: MediaQuery.of(context).size.width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -114,6 +118,8 @@ class SettingListViews extends StatelessWidget {
           child: Container(
             //color: Colors.transparent,
             height: 40,
+            color: Colors.transparent,
+            width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
