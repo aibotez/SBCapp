@@ -43,10 +43,11 @@ Future Init_Par() async{
   // }
 
   var mydata = MyDatabase();
-  mydata.init();
-  List netconfigs = await mydata.getdata();
+  // mydata.init();
+  List netconfigs = await mydata.init();
   Global.ipport = netconfigs[0]['ipport'];
-  mydata.closebase();
+  print(netconfigs);
+  // mydata.closebase();
   // await MyDatabase().getdata().then((value) => print(value));
   // print(netconfigs);
   // List netconfigs=[];

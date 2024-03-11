@@ -12,9 +12,15 @@ class MyDatabase {
   //   initdb();
   // }
 
-  void init(){
+  Future<List> init(){
     database_path();
-    initdb();
+    Future<List> infoslist = initdb();
+    // List infoslist = await getdata();
+    // print(infoslist);
+    closebase();
+    return infoslist;
+
+
   }
 
 
@@ -22,12 +28,12 @@ class MyDatabase {
     dbpath = await getDatabasesPath();
     print('dbpath:');
     print(dbpath);
-    // final path = join(dbpath, 'netconfig.db');
+    final path = join(dbpath, 'netconfig.db');
     // await deleteDatabase(path);
     // final path = join(dbPath, 'my_database.db');
   }
 
-  void initdb() async{
+  Future<List> initdb() async{
     final path = join(dbpath, 'netconfig.db');
     try {
         db = await openDatabase(
@@ -40,38 +46,45 @@ class MyDatabase {
           },
         );
 
+
+
         // _initDatabase();
         // insert();
         // print(66);
         List infoslist = await getdata();
         if(infoslist.length>1){
+          print('>1');
           await deletdata(infoslist);
         }
         if(infoslist.length<1){
+          print('<1');
           insert();
+          infoslist = await getdata();
         }
+        return infoslist;
         // print(a);
 
       } catch (e) {
       }
+      return [];
   }
 
 
   Future<bool> deletdata(infoslist) async{
-    // final path = join(dbpath, 'netconfig.db');
-    // Database db1 = await openDatabase(path);
+    final path = join(dbpath, 'netconfig.db');
+    Database db1 = await openDatabase(path);
     List ids = [];
     for(var i=2;i<=infoslist.length;i++){
       ids.add(i);
+      await db1.delete(
+        'net',
+        where: 'id = ?',
+        whereArgs: [i],
+      );
     }
 
-    await db?.delete(
-      'net',
-      where: 'id = ?',
-      whereArgs: ids,
-    );
 
-    // db1.close();
+    db1.close();
 
 
     return true;
@@ -96,12 +109,15 @@ class MyDatabase {
   }
 
   Future<bool> insert() async{
+    final path = join(dbpath, 'netconfig.db');
+    Database db1 = await openDatabase(path);
     // final db = await MyDatabase().database;
-    await db?.insert(
+    await db1.insert(
       'net',
       {'ipport': 'pi'},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    db1.close();
     return true;
 
   }
