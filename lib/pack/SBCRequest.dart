@@ -4,12 +4,14 @@ import '../globals.dart';
 
 class SBCRe{
   String host = Global.ipport;
+  String Cookie="2290227486@qq.comauth:pbkdf2_sha256\$260000\$xAC7jRv2Ll6SyatWxYwKme\$+GOP625eAG4gvQAj4iZE9XUi5zBNYgl6NaNbvWSyWts=";
+
 
   FilesData(path) async{
     String urlstr = 'http://' + host + '/GetFileListbyClient/';
     final url = Uri.parse(urlstr);
     //pas
-    String Cookie="2290227486@qq.comauth:pbkdf2_sha256\$260000\$xAC7jRv2Ll6SyatWxYwKme\$+GOP625eAG4gvQAj4iZE9XUi5zBNYgl6NaNbvWSyWts=";
+    // String Cookie="2290227486@qq.comauth:pbkdf2_sha256\$260000\$xAC7jRv2Ll6SyatWxYwKme\$+GOP625eAG4gvQAj4iZE9XUi5zBNYgl6NaNbvWSyWts=";
     //print(Cookie);
     Map data = {
       'path': path,
@@ -43,6 +45,35 @@ class SBCRe{
       return false;
     }
     return false;
+
+  }
+
+
+  get_img_base64(path) async{
+    String urlstr = 'http://' + host + '/preview/';
+    final url = Uri.parse(urlstr);
+    Map data = {
+      'filepath':path,
+      'client':'windows'
+    };
+
+    Map<String, String> headers = {
+      // 'Content-Type': 'application/json; charset=UTF-8',
+      'Cookie':'coks='+Cookie
+    };
+
+    var response = await http.post(url,headers: headers,body:data);
+    if (response.statusCode==200){
+      String ImgInfo = response.body;
+      print(ImgInfo);
+      // print(PageFilesInfos);
+      // List CurFileList = FilesInfos['FileList'];
+      return ImgInfo;
+      // return CurFileList;
+    }
+    return '';
+
+
 
   }
 
