@@ -70,7 +70,7 @@ class connectioninput extends StatelessWidget {
       mydata.updatedata(txtcontent);
       Global.ipport = txtcontent;
       // mydata.closebase();
-      List netconfigs = await mydata.getdata();
+      // List netconfigs = await mydata.getdata();
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => MyApp()),
