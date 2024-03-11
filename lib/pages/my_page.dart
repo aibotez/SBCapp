@@ -119,7 +119,7 @@ class MyPageListViews extends StatelessWidget {
       children: [
         Container(
           //color: Colors.transparent,
-          height: 40,
+          height: 50,
           color: Colors.transparent,
           width: MediaQuery.of(context).size.width,
           child: Row(
@@ -132,7 +132,7 @@ class MyPageListViews extends StatelessWidget {
                   children: [
                     Icon(Icons.share),
                     Container(width: 10,),
-                    Text('我的分享')
+                    Text('我的分享',style: TextStyle(fontSize: 16),)
                   ],
                 ),
               ),
@@ -144,10 +144,10 @@ class MyPageListViews extends StatelessWidget {
           ),
 
         ),
-        Divider(),
+        Divider(indent: 10,endIndent: 17,),
         Container(
           //color: Colors.transparent,
-          height: 40,
+          height: 50,
           color: Colors.transparent,
           width: MediaQuery.of(context).size.width,
           child: Row(
@@ -160,7 +160,7 @@ class MyPageListViews extends StatelessWidget {
                   children: [
                     Icon(Icons.widgets),
                     Container(width: 10,),
-                    Text('我的应用')
+                    Text('我的应用',style: TextStyle(fontSize: 16),)
                   ],
                 ),
               ),
@@ -172,10 +172,10 @@ class MyPageListViews extends StatelessWidget {
           ),
 
         ),
-        Divider(),
+        Divider(indent: 10,endIndent: 17,),
         Container(
           //color: Colors.transparent,
-          height: 40,
+          height: 50,
           color: Colors.transparent,
           width: MediaQuery.of(context).size.width,
           child: Row(
@@ -188,7 +188,7 @@ class MyPageListViews extends StatelessWidget {
                   children: [
                     Icon(Icons.downloading),
                     Container(width: 10,),
-                    Text('传输列表')
+                    Text('传输列表',style: TextStyle(fontSize: 16),)
                   ],
                 ),
               ),
@@ -200,7 +200,7 @@ class MyPageListViews extends StatelessWidget {
           ),
 
         ),
-        Divider(),
+        Divider(indent: 10,endIndent: 17,),
       ],
 
     );

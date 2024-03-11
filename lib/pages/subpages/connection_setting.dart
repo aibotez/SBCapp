@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import '../../pack/SBCRequest.dart';
 import '../../pack/dboper.dart';
 import '../../globals.dart';
 
@@ -93,10 +95,20 @@ class connectioninput extends StatelessWidget {
     //     MaterialPageRoute(builder: (context) => MyApp()));
   }
 
-  void testtxt(){
+  Future testtxt() async{
     test_show['icn'] = Icon(Icons.done,color: Colors.green);
     test_show['txt'] = '测试通过  '+txtcontent;
     test_show['visb'] = true;
+
+    bool connecttest = await SBCRe().HostTest(txtcontent);
+
+
+    if(connecttest){
+    }else{
+      test_show['txt'] = '测试失败  '+txtcontent;
+      test_show['icn'] = Icon(Icons.cancel_outlined,color: Colors.red);
+    }
+
     _streamController_Notitestresult.add(test_show);
   }
 
@@ -117,6 +129,8 @@ class connectioninput extends StatelessWidget {
       ///当TextField中输入的内容发生改变时回调
       onChanged: (value) {
         txtcontent = value;
+        test_show['visb'] = false;
+        _streamController_Notitestresult.add(test_show);
         // print("TextField 中输入的内容 $value");
       },
       decoration: const InputDecoration(

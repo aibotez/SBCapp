@@ -83,8 +83,8 @@ class HomeCellState extends State<HomeCell> {
                     width: 50,
                     margin: const EdgeInsets.only(right: 12.0,left:6.0),
                     child: Image(
-                      height: 10,
-                      width: 10,
+                      height: 20,
+                      width: 20,
                       fit: BoxFit.fill,
                       image: AssetImage(getFileConPath(PageFileInfos[PageFileInfos_list_namekey[index]])),
                     ),

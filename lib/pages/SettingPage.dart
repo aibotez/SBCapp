@@ -85,7 +85,7 @@ class SettingListViews extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => connectionsetting()));
           },
         ),
-        Divider(),
+        Divider(indent: 10,endIndent: 17),
         Container(
           //color: Colors.transparent,
           height: 40,
@@ -113,7 +113,7 @@ class SettingListViews extends StatelessWidget {
           ),
 
         ),
-        Divider(),
+        Divider(indent: 10,endIndent: 17),
         GestureDetector(
           child: Container(
             //color: Colors.transparent,
@@ -149,7 +149,7 @@ class SettingListViews extends StatelessWidget {
           },
         ),
 
-        Divider(),
+        Divider(indent: 10,endIndent: 17),
       ],
 
     );
