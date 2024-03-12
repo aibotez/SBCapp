@@ -50,7 +50,7 @@ class SBCRe{
 
 
   get_img_base64(path) async{
-    String urlstr = 'http://' + host + '/preview/';
+    String urlstr = 'http://' + host + '/preview/?filepath='+path;
     final url = Uri.parse(urlstr);
     Map data = {
       'filepath':path,
@@ -61,16 +61,23 @@ class SBCRe{
       // 'Content-Type': 'application/json; charset=UTF-8',
       'Cookie':'coks='+Cookie
     };
+    var response = await http.get(url,headers: headers);
 
-    var response = await http.post(url,headers: headers,body:data);
+    // var response = await http.post(url,headers: headers,body:json.encode(data));
+    print(path);
     if (response.statusCode==200){
-      String ImgInfo = response.body;
-      print(ImgInfo);
+      // Utf8Decoder utf8decoder = Utf8Decoder();
+      // String ImgInfo = utf8decoder.convert(response.bodyBytes);
+      // print(99);
+      // print(response.body);
+      // String ImgInfo = response.body;
+      // print(ImgInfo);
       // print(PageFilesInfos);
       // List CurFileList = FilesInfos['FileList'];
-      return ImgInfo;
+      return response.bodyBytes;
       // return CurFileList;
     }
+    print('get img fail');
     return '';
 
 

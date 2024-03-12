@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
+// import 'package:photo_view/photo_view.dart';
 import 'package:app/pack/SBCRequest.dart';
+import 'package:app/globals.dart';
 
 
 class preview_img extends StatelessWidget {
 
   String path='';
+
 
   preview_img(this.path);
 
@@ -16,9 +18,13 @@ class preview_img extends StatelessWidget {
 
 
   getBse64String(path) async {
-    String base64String = await SBCRe().get_img_base64(path);
-    print(base64String);
-    Uint8List bytes = base64Decode(base64String);
+
+    // String base64String = await SBCRe().get_img_base64(path);
+    // print(base64String is String);
+    // // print(utf8decoder.convert(base64String));
+    // Uint8List bytes = base64Decode(base64String);
+
+    Uint8List bytes= await SBCRe().get_img_base64(path);
     return bytes;
   }
 
@@ -26,6 +32,7 @@ class preview_img extends StatelessWidget {
   Widget build(BuildContext context) {
     print(path);
     getBse64String(path);
+    // String urlstr = 'http://' + Global.ipport + '/preview/?filepath='+path;
     //
     // String base64String =  getBse64String(path);
     //
@@ -41,6 +48,7 @@ class preview_img extends StatelessWidget {
             //print(snapshot.data);
             return GestureDetector(
               onTapUp: (e){
+                Navigator.of(context).pop();
                 //getChosed();
 
               },
@@ -56,7 +64,7 @@ class preview_img extends StatelessWidget {
 
     // return Container(
     //     child: PhotoView(
-    //       imageProvider: NetworkImage(imgUrl),
+    //       imageProvider: NetworkImage(urlstr),
     //     )
     // );
   }
