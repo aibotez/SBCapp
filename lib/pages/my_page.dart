@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SettingPage.dart';
+import 'subpages/my_Applications.dart';
 
 class My_Page extends StatefulWidget {
   const My_Page({super.key});
@@ -145,7 +146,7 @@ class MyPageListViews extends StatelessWidget {
 
         ),
         Divider(indent: 10,endIndent: 17,),
-        Container(
+        GestureDetector(child:Container(
           //color: Colors.transparent,
           height: 50,
           color: Colors.transparent,
@@ -171,7 +172,13 @@ class MyPageListViews extends StatelessWidget {
             ],
           ),
 
-        ),
+        ),onTap: (){
+
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => my_applications()));
+
+        },),
         Divider(indent: 10,endIndent: 17,),
         Container(
           //color: Colors.transparent,
