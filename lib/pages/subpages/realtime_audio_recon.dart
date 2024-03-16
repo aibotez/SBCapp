@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -163,20 +164,34 @@ class realtime_audio_recon_show extends StatelessWidget {
         Directory tempDir = await getTemporaryDirectory();
         var time = DateTime.now().millisecondsSinceEpoch;
         String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+        print(path);
+        var recordingDataController = StreamController<Food>();
+
+        recordingDataController.stream.listen((buffer) {
+          if (buffer is FoodData) {
+            print(buffer.data!);
+            // sink.add(buffer.data!);
+          }
+        });
 
         //这里我录制的是aac格式的，还有其他格式
         await recorderModule.startRecorder(
-          toFile: path,
-          codec: Codec.aacADTS,
-          bitRate: 8000,
+
+          toStream: recordingDataController.sink,
+          // toFile: path,
+          codec: Codec.pcm16,
+          bitRate: 16000,
           numChannels: 1,
-          sampleRate: 8000,
+          sampleRate: 16000,
+          bufferSize:1600,
         );
         /// 监听录音
-        var _recorderSubscription = recorderModule.onProgress!.listen((e) {
+        recorderModule.onProgress!.listen((e) {
           var date = DateTime.fromMillisecondsSinceEpoch(
+
               e.duration.inMilliseconds,
               isUtc: true);
+          // print(e);
           //设置了最大录音时长
           if (date.second >= _maxLength) {
             _stopRecorder();
