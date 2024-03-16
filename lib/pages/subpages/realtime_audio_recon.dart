@@ -121,27 +121,6 @@ class realtime_audio_recon_show extends StatelessWidget {
     } else {}
     return false;
   }
-
-
-
-
-
-  Future<bool> getPermissionStatus1() async {
-    Permission permission = Permission.microphone;
-    //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
-    PermissionStatus status = await permission.status;
-    if (status.isGranted) {
-      return true;
-    } else if (status.isDenied) {
-      requestPermission(permission);
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings();
-    } else if (status.isRestricted) {
-      requestPermission(permission);
-    } else {}
-    return false;
-  }
-
   ///申请权限
   void requestPermission(Permission permission) async {
     PermissionStatus status = await permission.request();
@@ -161,16 +140,20 @@ class realtime_audio_recon_show extends StatelessWidget {
           return;
         }
         //用户允许使用麦克风之后开始录音
-        Directory tempDir = await getTemporaryDirectory();
-        var time = DateTime.now().millisecondsSinceEpoch;
-        String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
-        print(path);
+        // Directory tempDir = await getTemporaryDirectory();
+        // var time = DateTime.now().millisecondsSinceEpoch;
+        // String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+        // print(path);
         var recordingDataController = StreamController<Food>();
 
         recordingDataController.stream.listen((buffer) {
           if (buffer is FoodData) {
-            print(buffer.data!);
+            List auddata0 = buffer.data!;
+
+            // List auddata = auddata0/32768.0;
+            print(auddata0);
             // sink.add(buffer.data!);
+
           }
         });
 
@@ -237,8 +220,8 @@ class realtime_audio_recon_show extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
-    FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+    // FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
+    // FlutterSoundPlayer playerModule = FlutterSoundPlayer();
 
     init();
     _startRecorder();
@@ -247,4 +230,7 @@ class realtime_audio_recon_show extends StatelessWidget {
     return const Placeholder();
   }
 }
+
+
+
 
