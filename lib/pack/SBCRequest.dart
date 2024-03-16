@@ -4,6 +4,7 @@ import '../globals.dart';
 
 class SBCRe{
   String host = Global.ipport;
+
   String Cookie="2290227486@qq.comauth:pbkdf2_sha256\$260000\$xAC7jRv2Ll6SyatWxYwKme\$+GOP625eAG4gvQAj4iZE9XUi5zBNYgl6NaNbvWSyWts=";
 
 

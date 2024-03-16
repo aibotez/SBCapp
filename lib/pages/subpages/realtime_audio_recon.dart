@@ -13,8 +13,9 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
-
+import '../../pack/SBCRequest.dart';
 import 'package:app/globals.dart';
 
 import 'package:flutter/foundation.dart';
@@ -80,36 +81,67 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
   bool start_record = false;
   Widget start_record_icon = Icon(Icons.not_started_outlined, size: 30, color: Colors.blue,);
-  IOWebSocketChannel? channel;
-  StreamController<String> _streamController_Date_show = StreamController();
 
+
+  Map send_data_map = {'coks':SBCRe().Cookie, 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
+
+
+
+  StreamController<String> _streamController_Date_show = StreamController();
+  WebSocketChannel channel = IOWebSocketChannel.connect(
+    'ws://${Global.ipport}/getSerInfows/',
+    // Uri.parse('wss://${Global.ipport}/getSerInfows/'),
+    headers: {
+      // 'Content-Type': 'application/json; charset=UTF-8',
+      'Cookie':'coks='+SBCRe().Cookie
+    },
+  );
 
 
 
   int _maxLength=60*60*6;
-  // FlautoRecorderPlugin.attachFlautoRecorder ( ctx, registrar.messenger ()  );
-  // TrackPlayerPlugin.attachTrackPlayer ( ctx, registrar.messenger ()  );
 
-  bool connect_ws(){
-    Map<String, dynamic> headers = new Map();
-    channel = IOWebSocketChannel.connect(
-        'wss://${Global.ipport}/getSerInfows/',
-        headers: headers,
-    );
-    channel?.stream.listen((message) {
+  @override
+  void initState(){
+    super.initState();
+    print('WS_coneect_test.......');
+    // Map<String, String> headers = {
+    //   // 'Content-Type': 'application/json; charset=UTF-8',
+    //   'Cookie':'coks='+SBCRe().Cookie
+    // };
+    // channel = IOWebSocketChannel.connect(
+    //   'wss://${Global.ipport}/getSerInfows/',
+    //   // Uri.parse('wss://${Global.ipport}/getSerInfows/'),
+    //   headers: headers,
+    // );
+
+    channel.stream.listen((message) {
       print(message);
+      print('WS_coneect_test.......');
+      print(channel.ready);
       final Map<String, dynamic> mesData = json.decode(message.toString()); // 返回的消息是String类型的，可以自己decode一些成为map类型
-
+      onError: (error){print('error');};
       setState(() {
-        print(mesData);
+        // print(mesData);
         // String text = mesData.text;
       });
 
     });
 
 
-    return true;
+
+    // Map te = {'coks':SBCRe().Cookie, 'SerInfos':1, 'DiskIndex':1};
+    //
+    // // Map te = {'type': 'websocket.receive', 'text': '{"coks":"22@66auth:12","SerInfos":1,"DiskIndex":1}'};
+    // channel.sink.add(json.encode(te));
+
+
   }
+
+
+  // FlautoRecorderPlugin.attachFlautoRecorder ( ctx, registrar.messenger ()  );
+  // TrackPlayerPlugin.attachTrackPlayer ( ctx, registrar.messenger ()  );
+  //IOWebSocketChannel channel = ;
 
 
 
@@ -190,12 +222,21 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
         recordingDataController.stream.listen((buffer) {
           if (buffer is FoodData) {
             List auddata0 = buffer.data!;
+            // List auddata = [];
 
             // List auddata = auddata0/32768.0;
             // print(auddata0);
             // sink.add(buffer.data!);
+            // for(var i=0;i<auddata0.length;i++){
+            //   auddata.add(i/32768.0);
+            // }
+            print(auddata0.length);
 
-            // channel?.sink.add(json.encode(auddata0));
+            send_data_map['audiodata'] = auddata0;
+            send_data_map['lagu'] = 'en';
+
+            // channel.sink.add(json.encode(send_data_map));
+
 
           }
         });
@@ -209,7 +250,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
           bitRate: 16000,
           numChannels: 1,
           sampleRate: 16000,
-          bufferSize:1600,
+          bufferSize:16000*2,
         );
         /// 监听录音
         recorderModule.onProgress!.listen((e) {
@@ -218,7 +259,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
               e.duration.inMilliseconds,
               isUtc: true);
           var txt = DateFormat('HH:mm:ss', 'en_GB').format(date);
-          print(txt);
+          // print(txt);
           _streamController_Date_show.add(txt);
           //设置了最大录音时长
           if (date.second >= _maxLength) {
