@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:app/globals.dart';
 
 import 'package:flutter/foundation.dart';
+
 
 
 class realtime_recon extends StatelessWidget {
@@ -78,6 +81,8 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   bool start_record = false;
   Widget start_record_icon = Icon(Icons.not_started_outlined, size: 30, color: Colors.blue,);
   IOWebSocketChannel? channel;
+  StreamController<String> _streamController_Date_show = StreamController();
+
 
 
 
@@ -109,6 +114,9 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
 
   void init() async {
+
+    await initializeDateFormatting();
+
 //开启录音
     await recorderModule.openRecorder();
     //设置订阅计时器
@@ -184,10 +192,10 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
             List auddata0 = buffer.data!;
 
             // List auddata = auddata0/32768.0;
-            print(auddata0);
+            // print(auddata0);
             // sink.add(buffer.data!);
 
-            channel?.sink.add(json.encode(auddata0));
+            // channel?.sink.add(json.encode(auddata0));
 
           }
         });
@@ -209,7 +217,9 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
               e.duration.inMilliseconds,
               isUtc: true);
-          // print(e);
+          var txt = DateFormat('HH:mm:ss', 'en_GB').format(date);
+          print(txt);
+          _streamController_Date_show.add(txt);
           //设置了最大录音时长
           if (date.second >= _maxLength) {
             _stopRecorder();
@@ -248,6 +258,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
     super.dispose();
     recorderModule.closeRecorder();
     channel?.sink.close();
+    _streamController_Date_show.close();
 
   }
 
@@ -260,6 +271,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
     // FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
     // FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+    // connect_ws();
 
     init();
     // _startRecorder();
@@ -299,9 +311,21 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
               Container(
                 margin: const EdgeInsets.only(left:20.0),
-                child: Text('..',
-                  style: TextStyle(color: Colors.red,fontSize: 20),
+                child: StreamBuilder<String>(
+                  //初始值
+                  initialData: '00:00:00',
+                  //绑定Stream
+                  stream: _streamController_Date_show.stream,//snapshot.data!
+                  builder: (context,snapshot) {
+                    return Container(
+                      //alignment: const FractionalOffset(0, 0),
+                      child: Text(snapshot.data!, style: TextStyle(color: Colors.red,fontSize: 20),),
+                      );
+                  },
                 ),
+                // child: Text('..',
+                //   style: TextStyle(color: Colors.red,fontSize: 20),
+                // ),
               ),
             ],),
           ),
