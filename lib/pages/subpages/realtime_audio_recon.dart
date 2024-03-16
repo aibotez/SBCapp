@@ -82,12 +82,16 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   bool start_record = false;
   Widget start_record_icon = Icon(Icons.not_started_outlined, size: 30, color: Colors.blue,);
 
-
+  int audio_split_dur_ms = 500;
+  int sample_rate = 16000;
+  List audio_data_list = [];
+  String rec_conts = '';
   Map send_data_map = {'coks':SBCRe().Cookie, 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
 
 
 
   StreamController<String> _streamController_Date_show = StreamController();
+  StreamController<String> _streamController_recon_show = StreamController();
   WebSocketChannel channel = IOWebSocketChannel.connect(
     'ws://${Global.ipport}/getSerInfows/',
     // Uri.parse('wss://${Global.ipport}/getSerInfows/'),
@@ -117,14 +121,22 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
     channel.stream.listen((message) {
       print(message);
-      print('WS_coneect_test.......');
-      print(channel.ready);
-      final Map<String, dynamic> mesData = json.decode(message.toString()); // 返回的消息是String类型的，可以自己decode一些成为map类型
+      final Map<String, dynamic> mesData = json.decode(message.toString()); // 返回
+      // _streamController_recon_show.add(mesData['data']);
+      if(mesData['res']==1 && mesData['data'] !=''){
+        rec_conts = rec_conts+mesData['data'];
+        _streamController_recon_show.add(rec_conts);
+      }
+      // rec_conts = rec_conts+'data\n\n\n\n\n\n\n\n\n';
+      // _streamController_recon_show.add(rec_conts);
+
+      // print('WS_coneect_test.......');
+      // print(channel.ready);
       onError: (error){print('error');};
-      setState(() {
-        // print(mesData);
-        // String text = mesData.text;
-      });
+      // setState(() {
+      //   // print(mesData);
+      //   // String text = mesData.text;
+      // });
 
     });
 
@@ -151,9 +163,9 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
 //开启录音
     await recorderModule.openRecorder();
+    // await recorderModule.setSubscriptionDuration(Duration(seconds: 1));
     //设置订阅计时器
-    await recorderModule
-        .setSubscriptionDuration(const Duration(milliseconds: 10));
+    await recorderModule.setSubscriptionDuration(const Duration(milliseconds: 100));
 
     //设置音频
     final session = await AudioSession.instance;
@@ -222,7 +234,24 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
         recordingDataController.stream.listen((buffer) {
           if (buffer is FoodData) {
             List auddata0 = buffer.data!;
+
+            // int audio_split_dur_ms = 150;
+            // int sample_rate = 16000;
+            if (audio_data_list.length/sample_rate>audio_split_dur_ms/1000){
+              print(audio_data_list.length);
+              send_data_map['audiodata'] = audio_data_list;
+              send_data_map['lagu'] = 'en';
+              channel.sink.add(json.encode(send_data_map));
+              audio_data_list = [];
+            }
+            else{
+              audio_data_list.addAll(auddata0);
+            }
+
+
+
             // List auddata = [];
+
 
             // List auddata = auddata0/32768.0;
             // print(auddata0);
@@ -230,10 +259,10 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
             // for(var i=0;i<auddata0.length;i++){
             //   auddata.add(i/32768.0);
             // }
-            print(auddata0.length);
-
-            send_data_map['audiodata'] = auddata0;
-            send_data_map['lagu'] = 'en';
+            // print(auddata0.length);
+            //
+            // send_data_map['audiodata'] = auddata0;
+            // send_data_map['lagu'] = 'en';
 
             // channel.sink.add(json.encode(send_data_map));
 
@@ -249,8 +278,8 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
           codec: Codec.pcm16,
           bitRate: 16000,
           numChannels: 1,
-          sampleRate: 16000,
-          bufferSize:16000*2,
+          sampleRate: sample_rate,
+          // bufferSize:2048,
         );
         /// 监听录音
         recorderModule.onProgress!.listen((e) {
@@ -279,6 +308,10 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   _stopRecorder() async {
     try {
       await recorderModule.stopRecorder();
+      // if (recorderModule != null) {
+      //   await recorderModule!.cancel();
+      //   recorderModule = null;
+      // }
       print('stopRecorder===> fliePath:');
     } catch (err) {
       print('stopRecorder error: $err');
@@ -298,8 +331,10 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
     // TODO: implement dispose
     super.dispose();
     recorderModule.closeRecorder();
-    channel?.sink.close();
+    channel.sink.close();
     _streamController_Date_show.close();
+
+    _streamController_recon_show.close();
 
   }
 
@@ -371,7 +406,22 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
             ],),
           ),
           Divider(indent: 0,endIndent: 0,),
-          Container(),
+          Expanded(child: SingleChildScrollView(child: Container(
+            child: StreamBuilder<String>(
+              //初始值
+              initialData: '',
+              //绑定Stream
+              stream: _streamController_recon_show.stream,//snapshot.data!
+              builder: (context,snapshot) {
+                return Container(
+                  alignment: Alignment.centerLeft,
+                  //alignment: const FractionalOffset(0, 0),
+                  child: Text(snapshot.data!, style: TextStyle(color: Colors.black,fontSize: 16),),
+                );
+              },
+            ),
+          ),)),
+
         ],
       ),
     );
