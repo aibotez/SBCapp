@@ -47,6 +47,8 @@ class _File_PageState extends State<File_Page> {
   //   });
   // }
   //Color _themColr = Color.fromRGBO(220, 220, 220, 1.0);
+  DateTime? _lastPressedAt;
+  bool popState = false;
 
   Color _themColr = Color.fromRGBO(253, 254, 254 , 1.0);
 
@@ -280,7 +282,7 @@ class _File_PageState extends State<File_Page> {
 
 
       body: PopScope(
-        canPop: false,
+        canPop: popState,
 
 
         child: Container(
@@ -332,7 +334,19 @@ class _File_PageState extends State<File_Page> {
           }
 
           if (FaPath=='//'){
-            return;
+            if(_lastPressedAt == null || DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 1)){
+              _lastPressedAt = DateTime.now();
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(backgroundColor:Colors.white70,content: Text('再按一次退出',style: TextStyle(color: Colors.black),)));
+
+              return;
+            }
+            else{
+              setState(() {
+                popState = true;
+              });
+            }
+            // return true;
           }
 
           else{
