@@ -82,7 +82,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   bool start_record = false;
   Widget start_record_icon = Icon(Icons.not_started_outlined, size: 30, color: Colors.blue,);
 
-  int audio_split_dur_ms = 500;
+  int audio_split_dur_ms = 2000;
   int sample_rate = 16000;
   List audio_data_list = [];
   String rec_conts = '';
@@ -234,11 +234,12 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
         recordingDataController.stream.listen((buffer) {
           if (buffer is FoodData) {
             List auddata0 = buffer.data!;
+            print(auddata0.last);
 
             // int audio_split_dur_ms = 150;
             // int sample_rate = 16000;
             if (audio_data_list.length/sample_rate>audio_split_dur_ms/1000){
-              print(audio_data_list.length);
+              // print(audio_data_list.length);
               send_data_map['audiodata'] = audio_data_list;
               send_data_map['lagu'] = 'en';
               channel.sink.add(json.encode(send_data_map));
@@ -279,6 +280,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
           bitRate: 16000,
           numChannels: 1,
           sampleRate: sample_rate,
+          audioSource: AudioSource.microphone,
           // bufferSize:2048,
         );
         /// 监听录音
