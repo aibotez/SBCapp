@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_sound/flutter_sound.dart';
-import 'package:text_to_speech/text_to_speech.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 
 
@@ -22,7 +22,9 @@ class _txt_audioState extends State<txt_audio> {
   String txt = '';
 
   Color _themColr = Color.fromRGBO(253, 254, 254 , 1.0);
-  TextToSpeech tts = TextToSpeech();
+
+  FlutterTts tts = FlutterTts();
+
 
 
 
@@ -48,7 +50,7 @@ class _txt_audioState extends State<txt_audio> {
       txt = (await getClipboardContent())!;
     }
     if (txt !=''){
-      tts.speak(txt);
+      await tts.speak(txt);
     }
 
   }
