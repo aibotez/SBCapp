@@ -1,6 +1,7 @@
 // import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
 import 'realtime_audio_recon.dart';
+import 'txt_audio.dart';
 
 
 class my_applications extends StatelessWidget {
@@ -74,7 +75,6 @@ class apps_show extends StatelessWidget {
             Text('实时语音识别',style: TextStyle(fontSize: 10),)
           ],),
         ),onTap: (){
-
           Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => realtime_recon()));
@@ -100,6 +100,30 @@ class apps_show extends StatelessWidget {
             Text('实时录制',style: TextStyle(fontSize: 10),)
           ],),
         ),
+
+        GestureDetector(child: Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(left:10.0),
+          padding: EdgeInsets.only(top:13),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Column(children: [
+            Container(child: Image(
+              height: 60,
+              width: 60,
+              fit: BoxFit.fill,
+              image: AssetImage('src/img/txt_audio.png'),
+            ),),
+            Text('文字转语音',style: TextStyle(fontSize: 10),)
+          ],),
+        ),onTap: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => txt_audio()));
+
+        },),
 
 
       ],
