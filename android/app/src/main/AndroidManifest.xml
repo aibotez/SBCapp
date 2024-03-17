@@ -1,6 +1,17 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    tools:overrideLibrary="com.tundralabs.fluttertts">-->
+
+
+
+<!--    <uses-sdk tools:overrideLibrary="com.tundralabs.fluttertts" />-->
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
+
+
     <application
         android:label="app"
         android:name="${applicationName}"
@@ -40,7 +51,7 @@
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
         <intent>
-            <action android:name="android.intent.action.TTS_SERVICE" />
+<!--            <action android:name="android.intent.action.TTS_SERVICE" />-->
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
