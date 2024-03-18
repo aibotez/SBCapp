@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'root_page.dart';
 import 'dart:io';
 import 'globals.dart';
@@ -73,6 +74,15 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Home(),
+
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,//是Flutter的一个本地化委托，用于提供Material组件库的本地化支持
+          GlobalWidgetsLocalizations.delegate,//用于提供通用部件（Widgets）的本地化支持
+          GlobalCupertinoLocalizations.delegate,//用于提供Cupertino风格的组件的本地化支持
+        ],
+      supportedLocales: [
+        const Locale('zh', 'CN'),// 支持的语言和地区
+      ],
     );
   }
 }

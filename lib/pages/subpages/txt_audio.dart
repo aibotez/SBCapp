@@ -23,7 +23,10 @@ class _txt_audioState extends State<txt_audio> {
 
   Color _themColr = Color.fromRGBO(253, 254, 254 , 1.0);
 
+  double volume = 0.5;
+
   FlutterTts tts = FlutterTts();
+
 
 
 
@@ -45,6 +48,7 @@ class _txt_audioState extends State<txt_audio> {
 
 
   void player() async{
+    await tts.setVolume(volume);
     if (txt==''){
       print(6);
       txt = (await getClipboardContent())!;
@@ -60,7 +64,10 @@ class _txt_audioState extends State<txt_audio> {
   @override
   Widget build(BuildContext context) {
 
+
     Widget Cont = Container(
+      padding: EdgeInsets.only(left:20,right: 20),
+
       // color: Colors.red,
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -68,7 +75,7 @@ class _txt_audioState extends State<txt_audio> {
 
         minLines:30,maxLines: null,
         decoration: const InputDecoration(
-          hintText: '输入内容，直接播放会从粘贴板里读取',
+          hintText: '输入内容，直接播放会读取复制的内容',
           hintStyle: TextStyle(fontSize: 16, color: Colors.grey), border: InputBorder.none,),
         onChanged: (value) {
           txt = value;
