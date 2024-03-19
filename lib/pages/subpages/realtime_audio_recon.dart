@@ -86,7 +86,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   int sample_rate = 16000;
   List audio_data_list = [];
   String rec_conts = '';
-  Map send_data_map = {'coks':SBCRe().Cookie, 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
+  Map send_data_map = {'coks':'22@66auth:12', 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
 
 
 

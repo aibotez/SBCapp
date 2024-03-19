@@ -9,8 +9,32 @@ class DownPage extends StatefulWidget {
 }
 
 class _DownPageState extends State<DownPage> {
+
+
+  Widget getDowns(){
+    Widget rowi = Row();
+
+    return rowi;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+
+    Widget cont = Container(
+      child: Column(children: [
+        Container(child: Text('xx'),),
+
+        Container(
+          child: Row(),
+        ),
+
+
+      ],),
+    );
+
+
+
+    return cont;
   }
 }
