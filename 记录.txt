@@ -1,0 +1,12 @@
+alignment: Alignment.centerRight,
+padding: EdgeInsets.only(top:13),
+margin: const EdgeInsets.only(right: 12.0),
+MediaQuery.of(context).size.width
+
+Navigator.push(context,MaterialPageRoute(builder: (context) => File_Page(CurPath)));
+Navigator.of(context).pop();
+
+decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(20),),
+
+
+GestureDetector

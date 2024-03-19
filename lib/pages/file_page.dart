@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:app/globals.dart';
 import '../pack/userlogin.dart';
 import 'dart:async';
+import '../pages/subpages/TransportPage.dart';
 
 
 
@@ -376,7 +377,27 @@ class _File_PageState extends State<File_Page> {
                 child: Container(
                   color: Colors.blue,
                   width: MediaQuery.of(context).size.width,
-                  child: Text('test'),
+                  height: 60,
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: EdgeInsets.only(top:9,left: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(child: const Column(
+                          children: [
+                            Icon(Icons.download_outlined,color: Colors.white),
+                            Text('下载',style: TextStyle(color: Colors.white,fontSize: 12),)
+                          ],
+                        ),onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => TransportPage()));
+                        },)
+
+                      ],
+                    ),
+                  ),
                 )
             ),
           );
