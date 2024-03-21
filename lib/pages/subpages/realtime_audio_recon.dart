@@ -87,7 +87,6 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   int audio_split_dur_ms = 1000;
   int sample_rate = 16000;
   int byteRate=0;
-
   List audio_data_list = [];
   String rec_conts = '';
   Map send_data_map = {'coks':'22@66auth:12', 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
