@@ -90,8 +90,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   String rec_conts = '';
   Map send_data_map = {'coks':'22@66auth:12', 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
 
-
-
+  
   StreamController<String> _streamController_Date_show = StreamController();
   StreamController<String> _streamController_recon_show = StreamController();
   WebSocketChannel channel = IOWebSocketChannel.connect(
