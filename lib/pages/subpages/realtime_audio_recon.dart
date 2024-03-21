@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
@@ -82,8 +84,10 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   bool start_record = false;
   Widget start_record_icon = Icon(Icons.not_started_outlined, size: 30, color: Colors.blue,);
 
-  int audio_split_dur_ms = 2000;
+  int audio_split_dur_ms = 1000;
   int sample_rate = 16000;
+  int byteRate=0;
+
   List audio_data_list = [];
   String rec_conts = '';
   Map send_data_map = {'coks':'22@66auth:12', 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
@@ -95,10 +99,10 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   WebSocketChannel channel = IOWebSocketChannel.connect(
     'ws://${Global.ipport}/getSerInfows/',
     // Uri.parse('wss://${Global.ipport}/getSerInfows/'),
-    headers: {
-      // 'Content-Type': 'application/json; charset=UTF-8',
-      'Cookie':'coks='+SBCRe().Cookie
-    },
+    // headers: {
+    //   // 'Content-Type': 'application/json; charset=UTF-8',
+    //   'Cookie':'coks='+SBCRe().Cookie
+    // },
   );
 
 
@@ -108,6 +112,8 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   @override
   void initState(){
     super.initState();
+
+    byteRate = ((16 * sample_rate * 1) / 8).round();
     print('WS_coneect_test.......');
     // Map<String, String> headers = {
     //   // 'Content-Type': 'application/json; charset=UTF-8',
@@ -215,6 +221,38 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   }
 
 
+  // import 'dart:typed_data';
+  // import 'dart:convert';
+
+  Int16List pcm16ToInt16(Uint8List pcm16Data) {
+    // 创建一个新的buffer，并将PCM 16数据复制到其中
+    final buffer = pcm16Data.buffer;
+    final data = buffer.asInt16List();
+
+    // // 创建一个新的Uint8List以容纳Int16List
+    // final int16List = Int16List(data.length);
+    // for (var i = 0; i < data.length; i++) {
+    //   int16List[i] = data.getInt16(i, Endian.little);
+    // }
+    //
+    // return int16List.buffer.asInt16List();
+    //
+    return data;
+  }
+
+
+
+  List unittoint13(uint8List){
+    final int length = uint8List.length ~/ sizeOf<Int16>();
+    final Int16List int16List = Int16List(length);
+    for (int i = 0; i < length; i++) {
+      int16List[i] = uint8List[i * 2 + 1] << 8 | uint8List[i * 2];
+    }
+    // print(int16List); // 输出: [256,
+    return int16List;// 513, 768, 1023]
+  }
+
+
 
   /// 开始录音
   _startRecorder() async {
@@ -225,19 +263,33 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
           return;
         }
         //用户允许使用麦克风之后开始录音
-        // Directory tempDir = await getTemporaryDirectory();
-        // var time = DateTime.now().millisecondsSinceEpoch;
-        // String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
-        // print(path);
+        Directory tempDir = await getTemporaryDirectory();
+        var time = DateTime.now().millisecondsSinceEpoch;
+        String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+        print(path);
         var recordingDataController = StreamController<Food>();
 
         recordingDataController.stream.listen((buffer) {
           if (buffer is FoodData) {
-            List auddata0 = buffer.data!;
-            print(auddata0.last);
+
+
+            List auddata0 = unittoint13(buffer.data!);
+            print('最大');
+            print(unittoint13(buffer.data!).last);
+
+            print(buffer.data!.buffer.asInt16List().last);
+            // Uint8List auddataui8 = Uint8List.fromList(buffer.data!);
+            // print(auddata0.runtimeType);
+            // print(buffer.data is Uint8List);
+            // print(buffer.data!.buffer.asByteData());
+            // auddata0 = pcm16ToInt16(buffer.data!);
+            audio_data_list.addAll(auddata0);
+            // print(auddata0.length);
+            // print(audio_data_list);
 
             // int audio_split_dur_ms = 150;
             // int sample_rate = 16000;
+            // if (audio_data_list.length>636){
             if (audio_data_list.length/sample_rate>audio_split_dur_ms/1000){
               // print(audio_data_list.length);
               send_data_map['audiodata'] = audio_data_list;
@@ -245,9 +297,9 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
               channel.sink.add(json.encode(send_data_map));
               audio_data_list = [];
             }
-            else{
-              audio_data_list.addAll(auddata0);
-            }
+            // else{
+            //   audio_data_list.addAll(auddata0);
+            // }
 
 
 
@@ -274,10 +326,12 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
         //这里我录制的是aac格式的，还有其他格式
         await recorderModule.startRecorder(
 
-          toStream: recordingDataController.sink,
+
+
+        toStream: recordingDataController.sink,
           // toFile: path,
           codec: Codec.pcm16,
-          bitRate: 16000,
+          // bitRate: byteRate,
           numChannels: 1,
           sampleRate: sample_rate,
           audioSource: AudioSource.microphone,
@@ -290,13 +344,15 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
               e.duration.inMilliseconds,
               isUtc: true);
           var txt = DateFormat('HH:mm:ss', 'en_GB').format(date);
-          // print(txt);
+          print(txt);
           _streamController_Date_show.add(txt);
           //设置了最大录音时长
           if (date.second >= _maxLength) {
             _stopRecorder();
             return;
           }
+
+
 
         });
 
