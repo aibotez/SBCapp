@@ -83,7 +83,6 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
 
   bool start_record = false;
   Widget start_record_icon = Icon(Icons.not_started_outlined, size: 30, color: Colors.blue,);
-
   int audio_split_dur_ms = 1000;
   int sample_rate = 16000;
   int byteRate=0;
