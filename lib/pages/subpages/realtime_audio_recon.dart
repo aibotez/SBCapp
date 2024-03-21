@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -19,15 +20,33 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../pack/SBCRequest.dart';
 import 'package:app/globals.dart';
-
+// import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 
+class realtime_recon extends StatefulWidget {
+  const realtime_recon({super.key});
 
-class realtime_recon extends StatelessWidget {
+  @override
+  State<realtime_recon> createState() => _realtime_reconState();
+}
+
+class _realtime_reconState extends State<realtime_recon> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
+
+
+
+// class realtime_recon1 extends StatelessWidget {
   // const realtime_recon({super.key});
 
   Color _themColr = Color.fromRGBO(253, 254, 254 , 1.0);
+
+  String value = '1';
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +75,35 @@ class realtime_recon extends StatelessWidget {
               ),
             ),
             Container(
-              child: Text(''),
+              child: DropdownButton(
+                items: const <DropdownMenuItem<String>>[
+                  DropdownMenuItem(child: Text("英语",style: TextStyle(color: Colors.black),),value: "1",),
+                  DropdownMenuItem(child: Text("中文",style: TextStyle(color: Colors.black),),value: "2",),
+                  // DropdownMenuItem(child: Text("自动识别",style: TextStyle(color: Colors.black),),value: "3",),
+                  // DropdownMenuItem(child: Text("自动识别",style: TextStyle(color: Colors.black),),value: "4",),
+                ],
+                hint:new Text("提示信息"),// 当没有初始值时显示
+                onChanged: (selectValue){//选中后的回调
+                  if (selectValue=='1'){
+                    Global.Faster_ChosedLagu = 'en';
+                  }else if(selectValue=='2'){
+                    Global.Faster_ChosedLagu = 'zh';
+                  }
+                  setState(() {
+                    value = selectValue!;
+                  });
+                },
+                value: value,// 设置初始值，要与列表中的value是相同的
+                elevation: 10,//设置阴影
+                style: new TextStyle(//设置文本框里面文字的样式
+                    color: Colors.blue,
+                    fontSize: 20
+                ),
+                iconSize: 30,//设置三角标icon的大小
+                // underline: Container(height: 1,color: Colors.blue,),// 下划线
+
+              ),
+              // child: Text('英文',style: TextStyle(fontSize: 19),),
             )
           ],
         )),
@@ -71,6 +118,9 @@ class realtime_recon extends StatelessWidget {
 
 
 class realtime_audio_recon_show extends StatefulWidget {
+
+  // String ChosedLagu;
+  // realtime_audio_recon_show(this.ChosedLagu);
   const realtime_audio_recon_show({super.key});
 
   @override
@@ -78,6 +128,11 @@ class realtime_audio_recon_show extends StatefulWidget {
 }
 
 class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
+
+  // String ChosedLagu;
+  // _realtime_audio_recon_showState(this.ChosedLagu);
+
+
   FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
   // FlutterSoundPlayer playerModule = FlutterSoundPlayer();
 
@@ -86,11 +141,12 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   int audio_split_dur_ms = 1000;
   int sample_rate = 16000;
   int byteRate=0;
+  List Max_audio_data_list=[];
   List audio_data_list = [];
   String rec_conts = '';
   Map send_data_map = {'coks':'22@66auth:12', 'audio_realtime':1, 'audiodata':[],'lagu':'en'};
 
-  
+
   StreamController<String> _streamController_Date_show = StreamController();
   StreamController<String> _streamController_recon_show = StreamController();
   WebSocketChannel channel = IOWebSocketChannel.connect(
@@ -123,7 +179,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
     // );
 
     channel.stream.listen((message) {
-      print(message);
+      // print(message);
       final Map<String, dynamic> mesData = json.decode(message.toString()); // 返回
       // _streamController_recon_show.add(mesData['data']);
       if(mesData['res']==1 && mesData['data'] !=''){
@@ -218,28 +274,10 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   }
 
 
-  // import 'dart:typed_data';
-  // import 'dart:convert';
-
-  Int16List pcm16ToInt16(Uint8List pcm16Data) {
-    // 创建一个新的buffer，并将PCM 16数据复制到其中
-    final buffer = pcm16Data.buffer;
-    final data = buffer.asInt16List();
-
-    // // 创建一个新的Uint8List以容纳Int16List
-    // final int16List = Int16List(data.length);
-    // for (var i = 0; i < data.length; i++) {
-    //   int16List[i] = data.getInt16(i, Endian.little);
-    // }
-    //
-    // return int16List.buffer.asInt16List();
-    //
-    return data;
-  }
 
 
 
-  List unittoint13(uint8List){
+  List unittoint16(uint8List){
     final int length = uint8List.length ~/ sizeOf<Int16>();
     final Int16List int16List = Int16List(length);
     for (int i = 0; i < length; i++) {
@@ -262,68 +300,38 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
         //用户允许使用麦克风之后开始录音
         Directory tempDir = await getTemporaryDirectory();
         var time = DateTime.now().millisecondsSinceEpoch;
-        String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
-        print(path);
+        // String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+        // print(path);
         var recordingDataController = StreamController<Food>();
 
         recordingDataController.stream.listen((buffer) {
           if (buffer is FoodData) {
 
-
-            List auddata0 = unittoint13(buffer.data!);
-            print('最大');
-            print(unittoint13(buffer.data!).last);
-
-            print(buffer.data!.buffer.asInt16List().last);
-            // Uint8List auddataui8 = Uint8List.fromList(buffer.data!);
-            // print(auddata0.runtimeType);
-            // print(buffer.data is Uint8List);
-            // print(buffer.data!.buffer.asByteData());
-            // auddata0 = pcm16ToInt16(buffer.data!);
+            List auddata0 = unittoint16(buffer.data!);
             audio_data_list.addAll(auddata0);
-            // print(auddata0.length);
-            // print(audio_data_list);
-
-            // int audio_split_dur_ms = 150;
-            // int sample_rate = 16000;
-            // if (audio_data_list.length>636){
+            Max_audio_data_list.add(audio_data_list.last);
             if (audio_data_list.length/sample_rate>audio_split_dur_ms/1000){
+              if (auddata0.last > Max_audio_data_list.last/2.7){
+
+              }else if(Max_audio_data_list.last<500){
+                audio_data_list = [];
+                Max_audio_data_list = [];
+              }else{
+                send_data_map['audiodata'] = audio_data_list;
+                send_data_map['lagu'] = Global.Faster_ChosedLagu;
+                channel.sink.add(json.encode(send_data_map));
+                audio_data_list = [];
+                Max_audio_data_list = [];
+              }
               // print(audio_data_list.length);
-              send_data_map['audiodata'] = audio_data_list;
-              send_data_map['lagu'] = 'en';
-              channel.sink.add(json.encode(send_data_map));
-              audio_data_list = [];
+
             }
-            // else{
-            //   audio_data_list.addAll(auddata0);
-            // }
-
-
-
-            // List auddata = [];
-
-
-            // List auddata = auddata0/32768.0;
-            // print(auddata0);
-            // sink.add(buffer.data!);
-            // for(var i=0;i<auddata0.length;i++){
-            //   auddata.add(i/32768.0);
-            // }
-            // print(auddata0.length);
-            //
-            // send_data_map['audiodata'] = auddata0;
-            // send_data_map['lagu'] = 'en';
-
-            // channel.sink.add(json.encode(send_data_map));
 
 
           }
         });
 
-        //这里我录制的是aac格式的，还有其他格式
         await recorderModule.startRecorder(
-
-
 
         toStream: recordingDataController.sink,
           // toFile: path,

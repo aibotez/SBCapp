@@ -9,6 +9,7 @@ class Global{
   static Map CurPage_File_Infos_Chosed = {};
   static int FileSelectState=0;
   static String ipport='';
+  static String Faster_ChosedLagu = 'en';
   // static bool FileChoseBarNotiOpen = false;
   // static var db;
 }
