@@ -179,7 +179,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
     // );
 
     channel.stream.listen((message) {
-      // print(message);
+      print(message);
       final Map<String, dynamic> mesData = json.decode(message.toString()); // 返回
       // _streamController_recon_show.add(mesData['data']);
       if(mesData['res']==1 && mesData['data'] !=''){
@@ -280,11 +280,13 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
   List unittoint16(uint8List){
     final int length = uint8List.length ~/ sizeOf<Int16>();
     final Int16List int16List = Int16List(length);
+    final Int16List int16List_abs = Int16List(length);
     for (int i = 0; i < length; i++) {
       int16List[i] = uint8List[i * 2 + 1] << 8 | uint8List[i * 2];
+      int16List_abs[i] = int16List[i].abs();
     }
     // print(int16List); // 输出: [256,
-    return int16List;// 513, 768, 1023]
+    return [int16List,int16List_abs];// 513, 768, 1023]
   }
 
 
@@ -307,16 +309,44 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
         recordingDataController.stream.listen((buffer) {
           if (buffer is FoodData) {
 
-            List auddata0 = unittoint16(buffer.data!);
+            List auddata0 = unittoint16(buffer.data!)[0];
+            List auddata0_abs = unittoint16(buffer.data!)[1];
             audio_data_list.addAll(auddata0);
-            Max_audio_data_list.add(audio_data_list.last);
-            if (audio_data_list.length/sample_rate>audio_split_dur_ms/1000){
-              if (auddata0.last > Max_audio_data_list.last/2.7){
 
-              }else if(Max_audio_data_list.last<500){
+
+
+            // rec_conts = rec_conts+audio_data_list.last.abs().toString()+' ';
+            // _streamController_recon_show.add(rec_conts);
+
+
+
+            final audio_data_list_max = auddata0_abs.cast<num>().reduce(max);
+            Max_audio_data_list.add(audio_data_list_max);
+            final audio_data_list_max_Max = Max_audio_data_list.cast<num>().reduce(max);
+
+            if (audio_data_list.length/sample_rate>audio_split_dur_ms/1000){
+              // print(auddata0_abs);
+              if (audio_data_list_max > audio_data_list_max_Max/2.7){
+                if(audio_data_list.length/sample_rate>3*audio_split_dur_ms/1000){
+                  print('t>3s..send');
+                  send_data_map['audiodata'] = audio_data_list;
+                  send_data_map['lagu'] = Global.Faster_ChosedLagu;
+                  channel.sink.add(json.encode(send_data_map));
+                  audio_data_list = [];
+                  Max_audio_data_list = [];
+                }
+                // print('>2.7...');
+                // print(Max_audio_data_list.length);
+
+                // print(audio_data_list_max);
+                // print(audio_data_list_max_Max);
+
+              }else if(audio_data_list_max_Max<300){
+                print('clear...');
                 audio_data_list = [];
                 Max_audio_data_list = [];
               }else{
+                print('send...');
                 send_data_map['audiodata'] = audio_data_list;
                 send_data_map['lagu'] = Global.Faster_ChosedLagu;
                 channel.sink.add(json.encode(send_data_map));
@@ -349,7 +379,7 @@ class _realtime_audio_recon_showState extends State<realtime_audio_recon_show> {
               e.duration.inMilliseconds,
               isUtc: true);
           var txt = DateFormat('HH:mm:ss', 'en_GB').format(date);
-          print(txt);
+          // print(txt);
           _streamController_Date_show.add(txt);
           //设置了最大录音时长
           if (date.second >= _maxLength) {

@@ -114,7 +114,7 @@ class MyDatabase {
     // final db = await MyDatabase().database;
     await db1.insert(
       'net',
-      {'ipport': 'pi'},
+      {'ipport': 'local.sbc.plus:90'},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     db1.close();
