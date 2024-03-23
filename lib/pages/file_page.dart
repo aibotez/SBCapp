@@ -57,6 +57,7 @@ class _File_PageState extends State<File_Page> {
   Future get_cur_files() async{
     List <Widget> Files_Infos = [];
     Map PageFilesInfos = await UserLofin().FilesData(CurPath);
+    // print(PageFilesInfos);
     List FilesInfos_all = PageFilesInfos['FileList'];
     Global.CurPage_File_Infos_Chosed={};
     for(var i=0;i<FilesInfos_all.length;i++){

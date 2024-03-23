@@ -7,11 +7,6 @@ class MyDatabase {
   String dbpath='';
   Database? db;
 
-  // MyDatabase(){
-  //   database_path();
-  //   initdb();
-  // }
-
   Future<List> init(){
     database_path();
     Future<List> infoslist = initdb();
@@ -32,6 +27,79 @@ class MyDatabase {
     // await deleteDatabase(path);
     // final path = join(dbPath, 'my_database.db');
   }
+
+  Future<void> init_user_info() async{
+
+
+    final path = join(dbpath, 'user_info.db');
+    Database db1 = await openDatabase(path);
+
+    try{
+      db1 = await openDatabase(
+        path,
+        version: 1,
+        onCreate: (Database db1, version) async {
+          await db1.execute(
+            'CREATE TABLE user(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT,password TEXT)',
+          );
+        },
+      );
+    }catch(e){
+
+    }
+    db1.close();
+
+  }
+
+
+
+  Future<bool> add_user(name,password) async{
+    List users = await get_user_data();
+    if (users.length>0){
+      del_user(users);
+    }
+
+    final path = join(dbpath, 'user_info.db');
+    Database db1 = await openDatabase(path);
+
+    await db1.insert(
+      'user',
+      {'username': name,'password':password},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    db1.close();
+    return true;
+
+  }
+
+
+  Future<List> get_user_data() async{
+    try{
+      final path = join(dbpath, 'user_info.db');
+      Database db1 = await openDatabase(path);
+      List users = await db1.query('user');
+      await db1.close();
+      return users;
+    }catch (e){
+      return [];
+    }
+  }
+
+  Future<bool> del_user(users) async{
+    final path = join(dbpath, 'user_info.db');
+    Database db1 = await openDatabase(path);
+    for(var i=1;i<=users.length;i++){
+      await db1.delete(
+        'user',
+        where: 'username = ?',
+        whereArgs: [users[i]['username']],
+      );
+    }
+    db1.close();
+    return true;
+  }
+
+
 
   Future<List> initdb() async{
     final path = join(dbpath, 'netconfig.db');

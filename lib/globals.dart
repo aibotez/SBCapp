@@ -10,6 +10,7 @@ class Global{
   static int FileSelectState=0;
   static String ipport='';
   static String Faster_ChosedLagu = 'en';
+  static String Cookie = '';
   // static bool FileChoseBarNotiOpen = false;
   // static var db;
 }

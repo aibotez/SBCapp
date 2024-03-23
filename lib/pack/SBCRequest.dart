@@ -2,11 +2,34 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../globals.dart';
 
+
 class SBCRe{
   String host = Global.ipport;
+  // String Cookie="2290227486@qq.comauth:pbkdf2_sha256\$260000\$xAC7jRv2Ll6SyatWxYwKme\$+GOP625eAG4gvQAj4iZE9XUi5zBNYgl6NaNbvWSyWts=";
 
-  String Cookie="2290227486@qq.comauth:pbkdf2_sha256\$260000\$xAC7jRv2Ll6SyatWxYwKme\$+GOP625eAG4gvQAj4iZE9XUi5zBNYgl6NaNbvWSyWts=";
+  Future<bool> Login() async{
+    String urlstr = 'http://' + host + '/loginVerify/';
+    final url = Uri.parse(urlstr);
+    Map data = {
+      'usercount': 'zz',
+      'userpassword': '123',
+    };
 
+    var response = await http.post(url,body:data);
+    if(response.headers['set-cookie'] != null) {
+      // save/process cookies
+      // print(response.headers['set-cookie']);
+      Global.Cookie = response.headers['set-cookie']!.split('"')[1];
+      // print(Global.Cookie);
+      return true;
+    }
+    else{
+      print('login fail');
+      return false;
+    }
+
+
+  }
 
   FilesData(path) async{
     String urlstr = 'http://' + host + '/GetFileListbyClient/';
@@ -19,7 +42,7 @@ class SBCRe{
     };
     Map<String, String> headers = {
       // 'Content-Type': 'application/json; charset=UTF-8',
-      'Cookie':'coks='+Cookie
+      'Cookie':'coks='+Global.Cookie
     };
     var response = await http.post(url,headers: headers,body:data);
     if (response.statusCode==200){
@@ -60,7 +83,7 @@ class SBCRe{
 
     Map<String, String> headers = {
       // 'Content-Type': 'application/json; charset=UTF-8',
-      'Cookie':'coks='+Cookie
+      'Cookie':'coks='+Global.Cookie
     };
     var response = await http.get(url,headers: headers);
 

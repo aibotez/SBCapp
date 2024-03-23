@@ -5,6 +5,8 @@ import 'dart:io';
 import 'globals.dart';
 // import 'package:flutter/services.dart';
 
+import 'package:app/pack/SBCRequest.dart';
+
 import 'pack/dboper.dart';
 
 
@@ -55,6 +57,11 @@ Future Init_Par() async{
 
 
   // Global.db=MyDatabase();
+  var sbcre = SBCRe();
+  bool login_sta = await sbcre.Login();
+
+
+
   return netconfigs;
 
 }
