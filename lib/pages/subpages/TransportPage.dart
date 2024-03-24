@@ -9,15 +9,20 @@ import 'DownPage.dart';
 class TransportPage extends StatefulWidget {
   const TransportPage({super.key});
 
+
   @override
   State<TransportPage> createState() => _TransportPageState();
 }
 
-class _TransportPageState extends State<TransportPage> with AutomaticKeepAliveClientMixin {
+class _TransportPageState extends State<TransportPage> with AutomaticKeepAliveClientMixin<TransportPage> {
+
 
 
   @override
   bool get wantKeepAlive => true;
+
+  int _currentIndex = 0;
+  List<Widget> _pages = [DownPage(),Text('Content of Tab 2'),Text('Content of Tab 3')];
 
   @override
   void initState() {
@@ -28,7 +33,7 @@ class _TransportPageState extends State<TransportPage> with AutomaticKeepAliveCl
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print('Transp....');
+    // print('Transp....');
     return MaterialApp(
       home: DefaultTabController(
         length: 3, // 设置Tab的数量
@@ -43,24 +48,30 @@ class _TransportPageState extends State<TransportPage> with AutomaticKeepAliveCl
               Container(width: 12,),
               const Text('传输列表')
             ],),
-            bottom: const TabBar(
-              tabs: <Widget>[
+            bottom: TabBar(
+              tabs: const <Widget>[
                 Tab(text: '下载列表'),
                 Tab(text: '上传列表'),
                 Tab(text: '同步列表'),
               ],
+              onTap:(index) {
+                _currentIndex = index;
+                setState(() {});
+              },
+
+
             ),
           ),
-          body: const TabBarView(
-            children: <Widget>[
-              Center(child: DownPage()),
-              Center(child: Text('Content of Tab 2')),
-              Center(child: Text('Content of Tab 3')),
-            ],
-          ),
+          body: IndexedStack(index: _currentIndex, children: _pages,),
+
+
+
         ),
       ),
     );
+
+
+
   }
 }
 

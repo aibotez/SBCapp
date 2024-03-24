@@ -155,7 +155,7 @@ class _File_PageState extends State<File_Page> {
 
     void returnButon(){
       Global.CurPage_File_Infos_Chosed = {};
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(context);
 
     }
     Widget titleWidget(){
@@ -393,7 +393,7 @@ class _File_PageState extends State<File_Page> {
                         ),onTap: (){
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => TransportPage()));
+                              MaterialPageRoute(builder: (context) => TransportPage(),));
                         },)
 
                       ],

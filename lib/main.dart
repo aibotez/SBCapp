@@ -9,6 +9,7 @@ import 'package:app/pack/SBCRequest.dart';
 
 import 'pack/dboper.dart';
 
+import 'package:app/pages/subpages/TransportPage.dart';
 
 import 'dart:async' show Future;
 // import 'package:flutter/services.dart' show rootBundle;
@@ -82,7 +83,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Home(),
 
-        localizationsDelegates: [
+      localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,//是Flutter的一个本地化委托，用于提供Material组件库的本地化支持
           GlobalWidgetsLocalizations.delegate,//用于提供通用部件（Widgets）的本地化支持
           GlobalCupertinoLocalizations.delegate,//用于提供Cupertino风格的组件的本地化支持
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: [
         const Locale('zh', 'CN'),// 支持的语言和地区
       ],
+
     );
   }
 }
@@ -97,8 +99,14 @@ class MyApp extends StatelessWidget {
 class Home extends StatelessWidget {
   const Home({super.key});
 
+
+  // int _currentIndex = 0;
+  // List<Widget> _pages = [RootPage(),TransportPage()];
+
   @override
   Widget build(BuildContext context) {
+    // int _currentIndex = 0;
+    // List<Widget> _pages = [RootPage(),TransportPage()];
     return FutureBuilder(
       future: Init_Par(),
       builder: (BuildContext context,AsyncSnapshot snapshot){
@@ -111,6 +119,7 @@ class Home extends StatelessWidget {
           // Global.db=MyDatabase();
           // print(Global.db.dbpath);
           // return Text('');
+          // return IndexedStack(index: _currentIndex, children: _pages,);
           return RootPage();
           //return ListView(children: snapshot.data,);
         }
