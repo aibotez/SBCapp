@@ -15,7 +15,7 @@ class SBCRe{
       'userpassword': '123',
     };
 
-    var response = await http.post(url,body:data);
+    var response = await http.post(url,body:data).timeout(const Duration(seconds: 2));
     if(response.headers['set-cookie'] != null) {
       // save/process cookies
       // print(response.headers['set-cookie']);
