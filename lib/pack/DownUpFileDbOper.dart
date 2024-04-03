@@ -7,6 +7,7 @@ class MyDatabase_downup {
   String Dbpath = '';
 
   Future<void> init() async {
+    getdbpath();
     init_file_info();
     // database_path();
     // Future<List> infoslist = initdb();
@@ -16,12 +17,19 @@ class MyDatabase_downup {
     // return infoslist;
   }
 
+  Future<void> getdbpath() async {
+    dbpath = await getDatabasesPath();
+    Dbpath = join(dbpath, 'DownUpFile_info.db');
+  }
+
 
   Future<void> init_file_info() async{
 
+    // dbpath = await getDatabasesPath();
+
 
     // final path = join(dbpath, 'DownUpFile_info.db');
-    Dbpath = join(dbpath, 'DownUpFile_info.db');
+    // Dbpath = join(dbpath, 'DownUpFile_info.db');
     Database? db;
 
 
@@ -48,6 +56,8 @@ class MyDatabase_downup {
   }
 
   Future<Database> openDb() async{
+    dbpath = await getDatabasesPath();
+    Dbpath = join(dbpath, 'DownUpFile_info.db');
     Database db = await openDatabase(Dbpath);
     return db;
   }

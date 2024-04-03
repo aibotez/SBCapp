@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
 
 import 'DownUpFileDbOper.dart';
@@ -23,24 +25,40 @@ class DownFIle{
     //upadte Golbal var
     //start down
 
+
+    // Database_downup.getdbpath();
     Database db = await Database_downup.openDb();
+    //
     fileinfo['savepath'] = local_dir+'/'+fileinfo['filename'];
+    List<int> bytes = base64Decode(fileinfo['filelj']);
+    String remotepath = String.fromCharCodes(bytes);
+    print(remotepath);
+    fileinfo['savepath'] = local_dir;
+    fileinfo['downpath'] = remotepath;
     Database_downup.add_down(fileinfo,db);
+    db.close();
 
 
   }
 
-  void downfile(downfileinfo){
+  void downfile(downfileinfos){
 
-    print(downfileinfo);
-    if (downfileinfo['isdir']!=0){
-      Map Files = GetAllFilesfromFolder(downfileinfo);
-      for (var i=0;i<Files.length;i++){
+    print(downfileinfos);
+    for (var i=0;i<downfileinfos.length;i++){
+      Map downfileinfo = downfileinfos[i];
+      if (downfileinfo['isdir']!=0){
+        Map Files = GetAllFilesfromFolder(downfileinfo);
+        for (var i=0;i<Files.length;i++){
 
+        }
+      }else{
+        downdeal(downfileinfo,'local_dir');
       }
-    }else{
 
     }
+
+
+
   }
 
 }
