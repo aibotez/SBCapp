@@ -7,6 +7,9 @@ import 'dart:async';
 import '../pages/subpages/TransportPage.dart';
 
 
+import '../pack/DownloadFileAct.dart';
+
+
 
 
 class File_Page extends StatefulWidget {
@@ -128,6 +131,19 @@ class _File_PageState extends State<File_Page> {
           visible: true, // 设置是否可见：true:可见 false:不可见
           child: Text('Hello World')
       );
+    }
+
+    List GetSelectFiles(){
+      List SelectFiles=[];
+      List CurPageFileskeys = CurPageFiles.keys.toList();
+      for(var i=0;i<CurPageFileskeys.length;i++){
+        if(CurPageFiles[CurPageFileskeys[i]]['selectedValue'] == true){
+          SelectFiles.add(CurPageFiles[CurPageFileskeys[i]]);
+        }
+      }
+
+      return SelectFiles;
+
     }
 
     void stlect_cancel_All(oper)
@@ -391,9 +407,18 @@ class _File_PageState extends State<File_Page> {
                             Text('下载',style: TextStyle(color: Colors.white,fontSize: 12),)
                           ],
                         ),onTap: (){
+
+                          List SelectFiles = GetSelectFiles();
+                          //deal Down
+
+                          DownFIle().downfile(SelectFiles);
+
+
+
+
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => TransportPage(),));
+                              MaterialPageRoute(builder: (context) => TransportPage(SelectFiles),));
                         },)
 
                       ],

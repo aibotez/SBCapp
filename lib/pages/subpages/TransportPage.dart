@@ -7,16 +7,20 @@ import 'DownPage.dart';
 
 
 class TransportPage extends StatefulWidget {
-  const TransportPage({super.key});
+
+  List SelectFiles;
+  TransportPage(this.SelectFiles);
+  // const TransportPage({super.key});
 
 
   @override
-  State<TransportPage> createState() => _TransportPageState();
+  State<TransportPage> createState() => _TransportPageState(SelectFiles);
 }
 
 class _TransportPageState extends State<TransportPage> with AutomaticKeepAliveClientMixin<TransportPage> {
 
-
+  List SelectFiles;
+  _TransportPageState(this.SelectFiles);
 
   @override
   bool get wantKeepAlive => true;

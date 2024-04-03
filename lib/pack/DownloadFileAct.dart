@@ -31,7 +31,9 @@ class DownFIle{
   }
 
   void downfile(downfileinfo){
-    if (downfileinfo['isdir']){
+
+    print(downfileinfo);
+    if (downfileinfo['isdir']!=0){
       Map Files = GetAllFilesfromFolder(downfileinfo);
       for (var i=0;i<Files.length;i++){
 
